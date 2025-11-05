@@ -18,6 +18,9 @@ services:
     networks:
       - dashboard_communication
 
+    environment:
+      - DASHBOARD_SERVER_API_COMMUNICATION_PORT=61001
+
 networks:
   dashboard_communication:
     name: dashboard_communication
@@ -25,7 +28,7 @@ networks:
 ```
 
 ## Minecraft Server 1
-This service provides the Minecraft server 1 hostet on `localhost:60001`. It's in the same network as `dashboard`, thus it's able to provide the data on `http://dashboard_communication:61001`.
+This service provides the Minecraft server 1 hostet on `localhost:60001`. It's in the same network as `dashboard`, thus it's able to provide the data on `http://server1:61001`.
 
 `minecraft/server1/compose.yml`
 ```yml
@@ -49,7 +52,7 @@ networks:
 ```
 
 ## Minecraft Server 2
-This service provides the Minecraft server 2 hostet on `localhost:60002`. It's in the same network as `dashboard`, thus it's able to provide the data on `http://dashboard_communication:61002`.
+This service provides the Minecraft server 2 hostet on `localhost:60002`. It's in the same network as `dashboard`, thus it's able to provide the data on `http://server2:61001`.
 
 `minecraft/server2/compose.yml`
 ```yml
@@ -61,7 +64,7 @@ services:
       - "60002:25565" # Minecraft port
 
     expose:
-      - "61002" # Dashboard communication from server 2
+      - "61001" # Dashboard communication from server 2
 
     networks:
       - dashboard
