@@ -21,6 +21,7 @@ services:
 networks:
   dashboard_communication:
     name: dashboard_communication
+    external: true
 ```
 
 ## Minecraft Server 1
@@ -43,6 +44,7 @@ services:
 
 networks:
   dashboard_communication:
+    name: dashboard_communication
     external: true
 ```
 
@@ -66,5 +68,6 @@ services:
 
 networks:
   dashboard_communication:
+    name: dashboard_communication
     external: true
 ```
