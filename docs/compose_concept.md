@@ -11,7 +11,7 @@ thus it's able to connect to the service `http://server1:61000` and service `htt
 services:
   dashboard:
     image: dashboard:latest
-    container_name: server1
+    container_name: dashboard
     ports:
       - "8080:80" # Dashboard UI port
 
