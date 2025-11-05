@@ -56,7 +56,7 @@ services:
     image: server:latest
     container_name: server2
     ports:
-      - "60002:25565"
+      - "60002:25565" # Minecraft port
 
     expose:
       - "61002" # Dashboard communication from server 2
