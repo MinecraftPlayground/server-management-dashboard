@@ -3,8 +3,8 @@ This is a concept on how we could setup multiple server instances that all use a
 
 
 ## Main Dashboard UI
-This service provides the dashboard hosted on `http://localhost:8080`. It's in the same network as `server1` and `server2`,
-thus it's able to connect to the services `http://dashboard_communication:61001` and `http://dashboard_communication:61002` to access the data.
+This service provides the dashboard hosted on `http://localhost:8080`. It's in the same network as service `server1` and service `server2`,
+thus it's able to connect to the service `http://server1:61000` and service `http://server2:61000` to access the data.
 
 `minecraft/dashboard/compose.yml`
 ```yml
@@ -19,7 +19,7 @@ services:
       - dashboard_communication
 
     environment:
-      - DASHBOARD_SERVER_API_COMMUNICATION_PORT=61001
+      - SERVERS=server1:61000,server2:61000 # Question is, if this is the best way to "tell the UI what servers it can find/manage"...
 
 networks:
   dashboard_communication:
@@ -28,7 +28,7 @@ networks:
 ```
 
 ## Minecraft Server 1
-This service provides the Minecraft server 1 hostet on `localhost:60001`. It's in the same network as `dashboard`, thus it's able to provide the data on `http://server1:61001`.
+This service provides the Minecraft server 1 hostet on `localhost:60001`. It's in the same network as service `dashboard`, thus it's able to provide the data on `http://server1:61000`.
 
 `minecraft/server1/compose.yml`
 ```yml
@@ -40,7 +40,7 @@ services:
       - "60001:25565" # Minecraft port
 
     expose:
-      - "61001" # Dashboard communication from server 1
+      - "61000" # Dashboard communication from server 1
 
     networks:
       - dashboard_communication
@@ -52,7 +52,7 @@ networks:
 ```
 
 ## Minecraft Server 2
-This service provides the Minecraft server 2 hostet on `localhost:60002`. It's in the same network as `dashboard`, thus it's able to provide the data on `http://server2:61001`.
+This service provides the Minecraft server 2 hostet on `localhost:60002`. It's in the same network as service `dashboard`, thus it's able to provide the data on `http://server2:61000`.
 
 `minecraft/server2/compose.yml`
 ```yml
@@ -64,10 +64,10 @@ services:
       - "60002:25565" # Minecraft port
 
     expose:
-      - "61001" # Dashboard communication from server 2
+      - "61000" # Dashboard communication from server 2
 
     networks:
-      - dashboard
+      - dashboard_communication
 
 networks:
   dashboard_communication:
