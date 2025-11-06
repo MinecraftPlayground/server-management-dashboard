@@ -50,7 +50,8 @@ services:
       - "60001:25565"
 
     expose:
-      # Expose the port only to the internal network, so that it can be accessed by the Dashboard for communicating with server 2.
+      # Expose the port only to the internal network, so that it can be accessed by the dashboard
+      # for communicating with server 2.
       - "61000"
 
     networks:
@@ -78,7 +79,8 @@ services:
       - "60002:25565"
 
     expose:
-      # Expose the port only to the internal network, so that it can be accessed by the Dashboard for communicating with server 2.
+      # Expose the port only to the internal network, so that it can be accessed by the dashboard
+      # for communicating with server 2.
       - "61000"
 
     networks:
