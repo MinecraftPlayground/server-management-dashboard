@@ -18,12 +18,12 @@ services:
 
     networks:
       # Network for communication between the Minecraft servers and the dashboard.
-      - dashboard_communication
+      - server_management
 
     environment:
       # Name of the shared network for the communication between the Minecraft servers and the dashboard.
       # We will use the Docker API to query all devices in that network, excluding self.
-      - NETWORK=dashboard_communication
+      - NETWORK=server_management
 
     volumes:
       # Socket for accessing the Docker API.
@@ -31,8 +31,8 @@ services:
 
 networks:
   # Network for communication between the Minecraft servers and the dashboard.
-  dashboard_communication:
-    name: dashboard_communication
+  server_management:
+    name: server_management
     external: true
 ```
 
@@ -56,12 +56,12 @@ services:
 
     networks:
       # Network for communication between the Minecraft server and the dashboard.
-      - dashboard_communication
+      - server_management
 
 networks:
   # Network for communication between the Minecraft servers and the dashboard.
-  dashboard_communication:
-    name: dashboard_communication
+  server_management:
+    name: server_management
     external: true
 ```
 
@@ -85,11 +85,11 @@ services:
 
     networks:
       # Network for communication between the Minecraft server and the dashboard.
-      - dashboard_communication
+      - server_management
 
 networks:
   # Network for communication between the Minecraft servers and the dashboard.
-  dashboard_communication:
-    name: dashboard_communication
+  server_management:
+    name: server_management
     external: true
 ```
