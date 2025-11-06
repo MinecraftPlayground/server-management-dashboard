@@ -13,15 +13,24 @@ services:
     image: dashboard:latest
     container_name: dashboard
     ports:
-      - "8080:80" # Dashboard UI port
+      # Dashboard UI port
+      - "8080:80"
 
     networks:
+      # Network for communication between the Minecraft servers and the dashboard.
       - dashboard_communication
 
     environment:
-      - SERVERS=server1:61000,server2:61000 # Question is, if this is the best way to "tell the UI what servers it can find/manage"...
+      # Name of the shared network for the communication between the Minecraft servers and the dashboard.
+      # We will use the Docker API to query all devices in that network, excluding self.
+      - NETWORK=dashboard_communication
+
+    volumes:
+      # Socket for accessing the Docker API.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
+  # Network for communication between the Minecraft servers and the dashboard.
   dashboard_communication:
     name: dashboard_communication
     external: true
@@ -37,15 +46,19 @@ services:
     image: server:latest
     container_name: server1
     ports:
-      - "60001:25565" # Minecraft port
+      # Minecraft port
+      - "60001:25565"
 
     expose:
-      - "61000" # Dashboard communication from server 1
+      # Expose the port only to the internal network, so that it can be accessed by the Dashboard for communicating with server 2.
+      - "61000"
 
     networks:
+      # Network for communication between the Minecraft server and the dashboard.
       - dashboard_communication
 
 networks:
+  # Network for communication between the Minecraft servers and the dashboard.
   dashboard_communication:
     name: dashboard_communication
     external: true
@@ -61,15 +74,19 @@ services:
     image: server:latest
     container_name: server2
     ports:
-      - "60002:25565" # Minecraft port
+      # Minecraft port
+      - "60002:25565"
 
     expose:
-      - "61000" # Dashboard communication from server 2
+      # Expose the port only to the internal network, so that it can be accessed by the Dashboard for communicating with server 2.
+      - "61000"
 
     networks:
+      # Network for communication between the Minecraft server and the dashboard.
       - dashboard_communication
 
 networks:
+  # Network for communication between the Minecraft servers and the dashboard.
   dashboard_communication:
     name: dashboard_communication
     external: true
