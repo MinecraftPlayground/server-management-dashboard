@@ -2,6 +2,10 @@
 This is a concept on how we could setup multiple server instances that all use a shared internal network and can be accessed over the same UI instance.
 The main goal is to provide an easy way of managing multiple Minecraft instances over the same dashboard UI. Also we wand an easy way of configuring/adding new instances and the dashboard UI should pick these up automatically.
 
+```´txt
+
+```
+
 ## Main Dashboard UI
 This service provides the dashboard hosted on `http://localhost:8080`. It's in the same network as service `server1` and service `server2`,
 thus it's able to connect to the service `http://server1:61000` and service `http://server2:61000` to access the data.
