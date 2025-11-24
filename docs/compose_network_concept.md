@@ -24,8 +24,8 @@ The main goal is to provide an easy way of managing multiple Minecraft instances
 |   |   +----------------------+   |                     |                                      |   |
 |   |                              |                     |                                      |   |
 |   +------------------------------+                     +--------------------------------------+   |
-|                                                                          |  |                     |
-|                                                                          |  |                     |
+|                                                                          |  ^                     |
+|                                                                          v  |                     |
 |   +-[compose.yml (Container)]----+                     +-[server_management (Docker Network)]-+   |
 |   |                              |                     |                                      |   |
 |   |                              |                     |                                      |   |
