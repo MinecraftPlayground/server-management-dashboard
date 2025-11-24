@@ -2,8 +2,77 @@
 This is a concept on how we could setup multiple server instances that all use a shared internal network and can be accessed over the same UI instance.
 The main goal is to provide an easy way of managing multiple Minecraft instances over the same dashboard UI. Also we wand an easy way of configuring/adding new instances and the dashboard UI should pick these up automatically.
 
-```txt
-
+```
++-[localhost (Host)]------------------------------------------------------------+
+|                                                                               |
+|                                                                               |
+|   +-[server_management (Docker Network)]-----------------+                    |
+|   |                                                      |                    |
+|   |                                                      |                    |
+|   |   +-[compose.yml (Container)]----+                   |                    |
+|   |   |                              |                   |                    |
+|   |   |                              |                   |                    |
+|   |   |   +-[Dashboard]----------+   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |      server1:61000 <-------- server1:61000   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |      server2:61000 <-------- server2:61000   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                :80 ----------------------------> localhost:8080   |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   +----------------------+   |                   |                    |
+|   |   |                              |                   |                    |
+|   |   +------------------------------+                   |                    |
+|   |                                                      |                    |
+|   |                                                      |                    |
+|   |   +-[compose.yml (Container)]----+                   |                    |
+|   |   |                              |                   |                    |
+|   |   |                              |                   |                    |
+|   |   |   +-[Server 1 (server1)]-+   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |             :61000 --------> server1:61000   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |             :25565 ----------------------------> localhost:60001  |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   +----------------------+   |                   |                    |
+|   |   |                              |                   |                    |
+|   |   +------------------------------+                   |                    |
+|   |                                                      |                    |
+|   |                                                      |                    |
+|   |   +-[compose.yml (Container)]----+                   |                    |
+|   |   |                              |                   |                    |
+|   |   |                              |                   |                    |
+|   |   |   +-[Server 2 (server2)]-+   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |             :61000 --------> server2:61000   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |             :25565 ----------------------------> localhost:60002  |
+|   |   |   |                      |   |                   |                    |
+|   |   |   |                      |   |                   |                    |
+|   |   |   +----------------------+   |                   |                    |
+|   |   |                              |                   |                    |
+|   |   +------------------------------+                   |                    |
+|   |                                                      |                    |
+|   |                                                      |                    |
+|   +------------------------------------------------------+                    |
+|                                                                               |
+|                                                                               |
++-------------------------------------------------------------------------------+
 ```
 
 ## Main Dashboard UI
