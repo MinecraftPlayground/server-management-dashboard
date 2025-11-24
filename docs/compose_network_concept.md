@@ -2,7 +2,7 @@
 This is a concept on how we could setup multiple server instances that all use a shared internal network and can be accessed over the same UI instance.
 The main goal is to provide an easy way of managing multiple Minecraft instances over the same dashboard UI. Also we wand an easy way of configuring/adding new instances and the dashboard UI should pick these up automatically.
 
-```´txt
+```txt
 
 ```
 
