@@ -100,7 +100,6 @@ networks:
   # Network for communication between the Minecraft servers and the dashboard.
   server_management:
     name: server_management
-    external: true
 ```
 
 ## Minecraft Server 1
@@ -129,7 +128,6 @@ networks:
   # Network for communication between the Minecraft servers and the dashboard.
   server_management:
     name: server_management
-    external: true
 ```
 
 ## Minecraft Server 2
@@ -158,7 +156,6 @@ networks:
   # Network for communication between the Minecraft servers and the dashboard.
   server_management:
     name: server_management
-    external: true
 ```
 
 ## Podman
