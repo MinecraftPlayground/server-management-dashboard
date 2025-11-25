@@ -95,6 +95,8 @@ services:
     volumes:
       # Socket for accessing the Docker API.
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Socket for accessing the Podman API.
+      # - /run/podman/podman.sock:/run/podman/podman.sock:ro
 
 networks:
   # Network for communication between the Minecraft servers and the dashboard.
