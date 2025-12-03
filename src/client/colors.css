@@ -1,4 +1,6 @@
 :root {
+  /* https://tailwindcss.com/docs/colors */
+
   --red-950: hsl(359.29, 79.42%, 15.35%);
   --red-900: hsl(358.8, 69.3%, 30.07%);
   --red-800: hsl(355.94, 91.15%, 32.55%);
