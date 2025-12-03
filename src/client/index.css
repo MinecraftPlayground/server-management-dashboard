@@ -1,3 +1,5 @@
+@import './colors.css';
+
 *,
 *::before,
 *::after {
@@ -11,28 +13,18 @@
 body {
   height: 100vh;
   display: grid;
-  align-items: center;
-  justify-content: center;
-}
+  grid-template-areas:
+    'header status'
+    'sidebar main'
+    'sidebar quick_access';
+  
+  grid-template-rows: 50px auto 50px;
+  grid-template-columns: 200px auto;
+  background-color: var(--color-neutral-800);
 
-.page {
-  display: grid;
-  gap: 100px;
-  justify-content: center;
-
-  .title,
-  .link {
-    text-align: center;
-    border-radius: 10px;
-    padding: 0 15px 5px;
-  }
-
-  .link {
-    font-family: Consolas;
-  }
-
-  .logo {
-    width: 200px;
-    margin: auto;
+  & > div {
+    display: grid;
+    place-items: center;
+    /* border: 1px solid red; */
   }
 }

@@ -1,0 +1,6 @@
+.container-main {
+  grid-area: main;
+  background-color: var(--color-container-main-background);
+  border: 1px solid var(--color-container-main-border);
+  border-right: none;
+}
