@@ -112,7 +112,9 @@
     "@solid-js": "npm:solid-js@1.9.10",
     "@solid-js/router": "npm:@solidjs/router@^0.15.3",
     "@std/cli": "jsr:@std/cli@^1.0.6",
-    "@std/http": "jsr:@std/http@^1.0.6",
-    "@std/fmt": "jsr:@std/fmt@^1.0.2"
+    "@std/fs": "jsr:@std/fs@^1.0.20",
+    "@std/http": "jsr:@std/http@^1.0.22",
+    "@std/fmt": "jsr:@std/fmt@^1.0.2",
+    "@std/path": "jsr:@std/path@^1.1.3"
   }
 }
