@@ -1,0 +1,33 @@
+.server-switcher {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+
+  .server-switcher-info {
+    display: grid;
+    height: 100%;
+    gap: 2px;
+    align-items: center;
+
+    .server-switcher-info__name,
+    .server-switcher-info__address {
+      line-height: 50%;
+      text-justify: center;
+    }
+
+    .server-switcher-info__name {
+      font-size: 1em;
+      font-weight: 500;
+    }
+
+    .server-switcher-info__address {
+      font-family: monospace;
+    }
+  }
+
+  .server-switcher-action {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+  }
+}

@@ -1,0 +1,5 @@
+.container-status {
+  grid-area: status;
+
+  border-bottom: 1px solid var(--color-container-border);
+}

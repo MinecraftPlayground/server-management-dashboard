@@ -1,10 +1,10 @@
 import { render } from '@solid-js/web';
 import { HashRouter, Route } from '@solid-js/router'
-import { Header } from './components/header/header.tsx';
-import { Status } from './components/status/status.tsx';
-import { Sidebar } from './components/sidebar/sidebar.tsx';
-import { Main } from './components/main/main.tsx';
-import { QuickAccess } from './components/quick_access/quick_access.tsx';
+import { Header } from './sections/header/header.tsx';
+import { Status } from './sections/status/status.tsx';
+import { Sidebar } from './sections/sidebar/sidebar.tsx';
+import { Main } from './sections/main/main.tsx';
+import { QuickAccess } from './sections/quick_access/quick_access.tsx';
 
 import './index.css'
 
@@ -16,7 +16,7 @@ render(
       <Status></Status>
       <Sidebar></Sidebar>
       <Main></Main>
-      <QuickAccess></QuickAccess>
+      {/* <QuickAccess></QuickAccess> */}
     </>}/>
   </HashRouter>,
   globalThis.document.body

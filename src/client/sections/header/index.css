@@ -1,0 +1,20 @@
+.container-header {
+  grid-area: header;
+  border-bottom: 1px solid var(--color-container-border);
+  padding: 4px;
+  display: block;
+
+  .logo-wrapper {
+    padding: 4px;
+    display: flex;
+    height: 100%;
+    gap: 4px;
+    border-radius: 4px;
+    background-color: var(--color-logo-wrapper-background);
+    
+    .logo {
+      height: auto;
+      border-radius: 2px;
+    }
+  }
+}
