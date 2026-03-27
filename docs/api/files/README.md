@@ -65,7 +65,7 @@ This returns all the files and directories for the directory `/some/`:
 ---
 
 ### `POST /api/files/<path_to_new_file>`
-Create new file with optional content. If the file already exists, an error will be returned. If the path for the file is nested inside other directories (ex. `some_other/new_file.txt`) and the directory does not exist, it will be created automatically. If the directory does already exists, the file will be created normally.
+Create a new file with optional content. If the file already exists, an error will be returned. If the path for the file is nested inside other directories (ex. `some_other/new_file.txt`) and the directory does not exist, it will be created automatically. If the directory does already exists, the file will be created normally.
 
 #### Examples
 ##### `POST /api/files/new_file.txt`
