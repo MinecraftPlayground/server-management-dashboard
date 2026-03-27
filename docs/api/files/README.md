@@ -1,75 +1,170 @@
-| Method | Route | Description/Usage |
-|:---:|:----|:----|
-| `POST` | `/api/files/<path_to_directory>/` | Create directory |
-| `DELETE` | `/api/files/<path_to_file>` | Delete file |
-| `DELETE` | `/api/files/<path_to_directory>/` | Delete directory recursively |
-| `PUT` | `/api/files/<path_to_file>` | Replace file content |
-| `PATCH` | `/api/files/<path_to_file>` | Rename/Move file |
-| `PATCH` | `/api/files/<path_to_directory>` | Rename/Move directory |
+# API: Files
 
-# `api/files`
-This endpoint provides an easy way of getting, changing, deleting and stating files/directories.
+The `/api/files/` endpoint provides a complete REST interface for managing files and directories on the server.
 
-## Methods
-### `GET /api/files/<path_to_file>`
-Get the contents of a file. This request returns the requested file with the respective `Content-Type` based on the file extension.
-
-#### Examples
-##### `GET /api/files/settings.json`
-This returns the `settings.json` file with the `Content-Type: application/json` from the path `/settings.json`.
-
-##### `GET /api/files/some/path/file.txt`
-This returns the `file.txt` file with the `Content-Type: text/plain` from the path `/some/path/file.txt`.
+All paths are relative to the server's configured root directory.  
+A path **ending with a trailing slash** (`/`) is treated as a **directory**, while a path **without a trailing slash** is treated as a **file**.
 
 ---
 
-### `GET /api/files/<path_to_directory>/`
-Get a listing for all files and directories (non recursive) for the given directory as a JSON object array.
+## GET `/api/files/<path>` 
+Retrieves the content of a file or lists the contents of a directory.
 
-#### Examples
-##### `GET /api/files/`
-This returns all the files and directories for the root directory (`/`):
+### GET `/api/files/<path_to_file>`
+- Read a file
+- Returns the raw file content.
+- The `Content-Type` header is automatically set based on the file extension.
+
+**Examples:**
+```bash
+curl http://localhost:8000/api/files/settings.json
+curl http://localhost:8000/api/files/plugins/myplugin/config.yml
+```
+
+### GET `/api/files/<path_to_directory>/`
+- List a directory (non-recursive)
+- Returns a JSON array containing the entries in the directory.
+
+**Example response:**
 ```json
 [
   {
+    "name": "settings.json",
     "path": "settings.json",
     "isDirectory": false,
     "isFile": true,
-    "isSymlink": false,
-    "name": "settings.json"
+    "isSymlink": false
   },
   {
-    "path": "some",
+    "name": "plugins",
+    "path": "plugins",
     "isDirectory": true,
     "isFile": false,
-    "isSymlink": false,
-    "name": "some"
-  }
-]
-```
-
-##### `GET /api/files/some/`
-This returns all the files and directories for the directory `/some/`:
-```json
-[
-  {
-    "path": "some\file.txt",
-    "isDirectory": false,
-    "isFile": true,
-    "isSymlink": false,
-    "name": "file.txt"
+    "isSymlink": false
   }
 ]
 ```
 
 ---
 
-### `POST /api/files/<path_to_new_file>`
-Create a new file with optional content. If the file already exists, an error will be returned. If the path for the file is nested inside other directories (ex. `some_other/new_file.txt`) and the directory does not exist, it will be created automatically. If the directory does already exists, the file will be created normally.
+## POST `/api/files/<path>` 
+Creates a new file or directory. Parent directories are created automatically.
 
-#### Examples
-##### `POST /api/files/new_file.txt`
-This will create a new file called `new_file.txt` in the root of the directory (`/`).
+### POST `/api/files/<path_to_file>`
+- Create a file
+- Optionally accepts the file content in the request body.
+- Returns an error if the file already exists.
 
-##### `POST /api/files/some_other/new_file.txt`
-This will create a new file called `new_file.txt` in the directory `/some_other/`. The directory `/some_other/` will be created if it doesn't exists already.
+**Examples:**
+```bash
+# Create an empty file
+curl -X POST http://localhost:8000/api/files/newfile.txt
+
+# Create a file with content
+curl -X POST http://localhost:8000/api/files/config.json \
+  -H "Content-Type: application/json" \
+  -d '{"server": {"port": 25565}}'
+```
+
+### POST `/api/files/<path_to_directory>/`
+- Create a directory
+
+**Examples:**
+```bash
+curl -X POST http://localhost:8000/api/files/newfolder/
+curl -X POST http://localhost:8000/api/files/deep/nested/folder/
+```
+
+---
+
+## DELETE `/api/files/<path>`
+Deletes a file or a directory (recursively).
+
+### DELETE `/api/files/<path_to_file>`
+- Delete a file
+
+**Example:**
+```bash
+curl -X DELETE http://localhost:8000/api/files/oldfile.txt
+```
+
+### DELETE `/api/files/<path_to_directory>/`
+- Delete a directory recursively
+- Deletes the directory and all its contents (files and subdirectories).
+
+**Example:**
+```bash
+curl -X DELETE http://localhost:8000/api/files/oldfolder/
+```
+
+---
+
+## PUT `/api/files/<path>` 
+Replaces the entire content of an existing file (overwrite).  
+Cannot be used on directories.
+
+### PUT `/api/files/<path_to_file>`
+
+**Examples:**
+```bash
+curl -X PUT http://localhost:8000/api/files/settings.json \
+  -H "Content-Type: application/json" \
+  -d '{"updated": true}'
+
+# Using Fetch (JavaScript)
+fetch("/api/files/config.yml", {
+  method: "PUT",
+  body: "new content here",
+  headers: { "Content-Type": "text/plain" }
+});
+```
+
+---
+
+## PATCH `/api/files/<path>`
+Renames or moves a file or directory.
+The request body must contain a JSON object with a `newPath` field.
+
+### PATCH `/api/files/<path_to_file>`
+
+**Examples:**
+```bash
+# Rename file
+curl -X PATCH http://localhost:8000/api/files/oldname.txt \
+  -H "Content-Type: application/json" \
+  -d '{"newPath": "newname.txt"}'
+```
+
+```bash
+# Move file
+curl -X PATCH http://localhost:8000/api/files/oldfolder/file.txt \
+  -H "Content-Type: application/json" \
+  -d '{"newPath": "newfolder/file.txt"}'
+```
+
+
+### PATCH `/api/files/<path_to_directory>/`
+
+**Examples:**
+```bash
+# Rename directory
+curl -X PATCH http://localhost:8000/api/files/oldfolder/ \
+  -H "Content-Type: application/json" \
+  -d '{"newPath": "newfolder/"}'
+```
+
+```bash
+# Move directory
+curl -X PATCH http://localhost:8000/api/files/oldfolder/ \
+  -H "Content-Type: application/json" \
+  -d '{"newPath": "backup/oldfolder/"}'
+```
+
+---
+
+## Common Error Codes
+
+- `404` – File or directory not found
+- `409` – Conflict (e.g. file already exists on `POST`)
+- `400` – Bad request (missing `newPath` in `PATCH`, etc.)
+- `500` – Internal server error
