@@ -110,13 +110,6 @@ Cannot be used on directories.
 curl -X PUT http://localhost:8000/api/files/settings.json \
   -H "Content-Type: application/json" \
   -d '{"updated": true}'
-
-# Using Fetch (JavaScript)
-fetch("/api/files/config.yml", {
-  method: "PUT",
-  body: "new content here",
-  headers: { "Content-Type": "text/plain" }
-});
 ```
 
 ---
