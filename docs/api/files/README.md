@@ -32,18 +32,18 @@ This returns all the files and directories for the root directory (`/`):
 ```json
 [
   {
-    path: "settings.json",
-    isDirectory: false,
-    isFile: true,
-    isSymlink: false,
-    name: "settings.json"
+    "path": "settings.json",
+    "isDirectory": false,
+    "isFile": true,
+    "isSymlink": false,
+    "name": "settings.json"
   },
   {
-    path: "some",
-    isDirectory: true,
-    isFile: false,
-    isSymlink: false,
-    name: "some"
+    "path": "some",
+    "isDirectory": true,
+    "isFile": false,
+    "isSymlink": false,
+    "name": "some"
   }
 ]
 ```
@@ -53,11 +53,11 @@ This returns all the files and directories for the directory `/some/`:
 ```json
 [
   {
-    path: "some\file.txt",
-    isDirectory: false,
-    isFile: true,
-    isSymlink: false,
-    name: "file.txt"
+    "path": "some\file.txt",
+    "isDirectory": false,
+    "isFile": true,
+    "isSymlink": false,
+    "name": "file.txt"
   }
 ]
 ```
