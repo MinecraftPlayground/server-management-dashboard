@@ -18,7 +18,7 @@ Retrieves the content of a file or lists the contents of a directory.
 **Examples:**
 ```bash
 curl http://localhost:8000/api/files/settings.json
-curl http://localhost:8000/api/files/plugins/myplugin/config.yml
+curl http://localhost:8000/api/files/mods/mymod/config.yml
 ```
 
 ### GET `/api/files/<path_to_directory>/`
@@ -36,14 +36,68 @@ curl http://localhost:8000/api/files/plugins/myplugin/config.yml
     "isSymlink": false
   },
   {
-    "name": "plugins",
-    "path": "plugins",
+    "name": "mods",
+    "path": "mods",
     "isDirectory": true,
     "isFile": false,
     "isSymlink": false
   }
 ]
 ```
+
+---
+
+## HEAD `/api/files/<path>` 
+Returns metadata about a file or directory **without** returning the actual content or directory listing.  
+Useful for checking existence, size, modification time, etc.
+
+### HEAD `/api/files/<path_to_file>`
+- Get metadata for a file
+
+**Response headers include:**
+- `Content-Length` - Size of the file in bytes
+- `Content-Type` - MIME type of the file
+- `Last-Modified` - Last modification timestamp (RFC 1123)
+- `X-Is-Directory: false`
+
+**Examples:**
+```bash
+# Check file metadata
+curl -I http://localhost:8000/api/files/settings.json
+```
+
+**Example response headers:**
+```
+HTTP/1.1 200 OK
+Content-Length: 1248
+Content-Type: application/json
+Last-Modified: Fri, 27 Mar 2026 08:15:30 GMT
+X-Is-Directory: false
+```
+
+### HEAD `/api/files/<path_to_directory>/`
+- Get metadata for a directory
+
+**Response headers include:**
+- `X-Is-Directory: true`
+- `Last-Modified` - Last modification timestamp of the directory
+
+**Examples:**
+```bash
+# Check directory metadata
+curl -I http://localhost:8000/api/files/mods/
+```
+
+**Example response headers:**
+```
+HTTP/1.1 200 OK
+Last-Modified: Fri, 27 Mar 2026 07:45:12 GMT
+X-Is-Directory: true
+```
+
+**Status Codes:**
+- `200` - Exists
+- `404` - Not found
 
 ---
 
