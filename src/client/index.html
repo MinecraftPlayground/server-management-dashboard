@@ -636,6 +636,30 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
   flex-shrink: 0;
 }
 
+.con-search-bar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 13px; border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+.con-search {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 5px 9px; flex: 1;
+  transition: border-color var(--t);
+}
+.con-search:focus-within { border-color: var(--border-focus); }
+.con-search input {
+  background: none; border: none; outline: none;
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--text-primary); width: 100%;
+}
+.con-search input::placeholder { color: var(--text-muted); }
+.con-search svg { color: var(--text-muted); flex-shrink: 0; }
+.con-search-count {
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--text-muted); white-space: nowrap; flex-shrink: 0;
+}
+
 .con-output-title {
   font-size: 12px; font-weight: 600;
   display: flex; align-items: center; gap: 7px;
@@ -1080,14 +1104,14 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
 .fb-search {
   display: flex; align-items: center; gap: 6px;
   background: var(--bg-input); border: 1px solid var(--border);
-  border-radius: var(--r-md); padding: 5px 9px;
+  border-radius: var(--r-md); padding: 5px 9px; flex: 1;
   transition: border-color var(--t);
 }
 .fb-search:focus-within { border-color: var(--border-focus); }
 .fb-search input {
   background: none; border: none; outline: none;
   font-family: var(--font-mono); font-size: 11px;
-  color: var(--text-primary); width: 130px;
+  color: var(--text-primary); width: 100%;
 }
 .fb-search input::placeholder { color: var(--text-muted); }
 .fb-search svg { color: var(--text-muted); flex-shrink: 0; }
@@ -1762,8 +1786,8 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
 
 /* Toolbar */
 .bk-toolbar {
-  display: flex; align-items: center; gap: 7px;
-  padding: 8px 10px; border-bottom: 1px solid var(--border-subtle); flex-shrink: 0;
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 12px; flex-shrink: 0;
 }
 .bk-search {
   display: flex; align-items: center; gap: 6px;
@@ -1978,8 +2002,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
 }
 .lg-toolbar {
   display: flex; align-items: center; gap: 7px;
-  padding: 8px 10px; border-bottom: 1px solid var(--border-subtle);
-  flex-shrink: 0; flex-wrap: wrap;
+  margin-bottom: 12px; flex-shrink: 0; flex-wrap: wrap;
 }
 .lg-search {
   display: flex; align-items: center; gap: 6px;
@@ -2048,6 +2071,167 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
 .lg-sb-chip { display: flex; align-items: center; gap: 5px; }
 .lg-sb-sep  { width: 1px; height: 12px; background: var(--border); }
 .lg-sb-sp   { flex: 1; }
+/* ── UPTIME PAGE ── */
+.page-uptime { display: none; }
+.page-uptime.active-page {
+  display: flex; flex-direction: column; flex: 1; min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.page-uptime.active-page::-webkit-scrollbar { width: 5px; }
+.page-uptime.active-page::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* Hero banner */
+.up-hero {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 20px 24px;
+  display: flex; align-items: center; gap: 20px;
+  margin-bottom: 16px; flex-shrink: 0;
+}
+.up-hero-status {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  flex-shrink: 0;
+}
+.up-pulse-ring {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(61,122,86,0.10); border: 2px solid rgba(61,122,86,0.35);
+  position: relative;
+}
+.up-pulse-ring::after {
+  content: ''; position: absolute; inset: -6px; border-radius: 50%;
+  border: 2px solid rgba(61,122,86,0.18);
+  animation: upPulse 2.2s ease-out infinite;
+}
+@keyframes upPulse {
+  0%   { opacity:1; transform: scale(1); }
+  100% { opacity:0; transform: scale(1.45); }
+}
+.up-pulse-dot { width: 18px; height: 18px; border-radius: 50%; background: var(--text-online); }
+.up-hero-label { font-family: var(--font-mono); font-size: 10px; color: var(--text-online); font-weight: 700; letter-spacing: 0.08em; }
+
+.up-hero-info { flex: 1; min-width: 0; }
+.up-hero-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 3px; }
+.up-hero-sub   { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+
+.up-hero-kpis {
+  display: flex; gap: 24px; flex-shrink: 0;
+}
+.up-kpi { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.up-kpi-val  { font-size: 20px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+.up-kpi-val.good { color: var(--text-online); }
+.up-kpi-val.warn { color: var(--text-warn); }
+.up-kpi-label{ font-family: var(--font-mono); font-size: 9.5px; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Stat row */
+.up-stat-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 11px; margin-bottom: 16px; flex-shrink: 0;
+}
+
+/* Chart card */
+.up-chart-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+  margin-bottom: 11px; flex-shrink: 0;
+}
+.up-chart-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-bottom: 1px solid var(--border-subtle);
+}
+.up-chart-title {
+  font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 7px;
+}
+.up-chart-title svg { color: var(--text-muted); }
+.up-range-btns { display: flex; gap: 4px; }
+.up-range-btn {
+  font-family: var(--font-mono); font-size: 9.5px; padding: 2px 7px;
+  border-radius: var(--r-sm); border: 1px solid var(--border);
+  background: transparent; color: var(--text-muted); cursor: pointer;
+  transition: all var(--t);
+}
+.up-range-btn:hover { color: var(--text-primary); border-color: var(--border-focus); }
+.up-range-btn.active { background: var(--bg-active); color: var(--text-primary); border-color: var(--border-focus); }
+
+.up-chart-body { padding: 14px 14px 10px; position: relative; }
+.up-chart-svg  { width: 100%; display: block; }
+
+/* Incident timeline */
+.up-timeline-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+  flex-shrink: 0;
+}
+.up-timeline-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-bottom: 1px solid var(--border-subtle);
+}
+.up-timeline-title { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
+.up-timeline-title svg { color: var(--text-muted); }
+
+.up-inc-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 11px 14px; border-bottom: 1px solid var(--border-subtle);
+}
+.up-inc-row:last-child { border-bottom: none; }
+.up-inc-icon {
+  width: 28px; height: 28px; border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.up-inc-icon.down  { background: rgba(122,53,53,0.12);  color: var(--text-error); border: 1px solid rgba(122,53,53,0.28); }
+.up-inc-icon.degraded { background: rgba(122,100,48,0.12); color: var(--text-warn);  border: 1px solid rgba(122,100,48,0.3); }
+.up-inc-icon.ok    { background: rgba(61,122,86,0.10);  color: var(--text-online); border: 1px solid rgba(61,122,86,0.25); }
+.up-inc-info { flex: 1; min-width: 0; }
+.up-inc-title { font-size: 12.5px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
+.up-inc-meta  { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); display: flex; gap: 10px; flex-wrap: wrap; }
+.up-inc-dur   { font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); flex-shrink: 0; white-space: nowrap; text-align: right; }
+.up-inc-tag {
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+  padding: 1px 5px; border-radius: 3px; letter-spacing: 0.05em; text-transform: uppercase;
+  flex-shrink: 0;
+}
+.up-inc-tag.down     { background: rgba(122,53,53,0.12);  color: var(--text-error); border: 1px solid rgba(122,53,53,0.28); }
+.up-inc-tag.degraded { background: rgba(122,100,48,0.12); color: var(--text-warn);  border: 1px solid rgba(122,100,48,0.3); }
+.up-inc-tag.ok       { background: rgba(61,122,86,0.10);  color: var(--text-online); border: 1px solid rgba(61,122,86,0.25); }
+
+/* 90-day bar strip */
+.up-90day-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+  margin-bottom: 11px; flex-shrink: 0;
+}
+.up-90day-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-bottom: 1px solid var(--border-subtle);
+}
+.up-90day-title { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
+.up-90day-title svg { color: var(--text-muted); }
+.up-90day-body { padding: 12px 14px; }
+.up-bar-strip {
+  display: flex; gap: 2px; align-items: flex-end; height: 32px; margin-bottom: 6px;
+}
+.up-bar {
+  flex: 1; border-radius: 2px; cursor: default;
+  transition: opacity var(--t);
+  min-width: 2px;
+}
+.up-bar:hover { opacity: 0.75; }
+.up-bar.up      { background: var(--text-online); }
+.up-bar.partial { background: var(--text-warn); }
+.up-bar.down    { background: var(--text-error); }
+.up-bar.no-data { background: var(--border); }
+.up-bar-labels {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-mono); font-size: 9.5px; color: var(--text-muted);
+}
+.up-legend {
+  display: flex; gap: 14px; margin-top: 8px;
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
+}
+.up-legend-item { display: flex; align-items: center; gap: 5px; }
+.up-legend-dot  { width: 8px; height: 8px; border-radius: 2px; }
+
 </style>
 </head>
 <body>
@@ -2242,6 +2426,13 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
       </svg>
       <span class="nav-text">Crash Reports</span>
       <span class="nav-badge err" id="nav-badge-crash" style="display:none"></span>
+    </a>
+
+    <a class="nav-link" href="#" data-nav onclick="nav(this,event)">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      <span class="nav-text">Uptime</span>
     </a>
 
   </nav>
@@ -2471,13 +2662,17 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
         </div>
       </div>
 
-      <!-- Toolbar: breadcrumb + search -->
+      <!-- Breadcrumb -->
       <div class="fb-toolbar">
         <div class="fb-breadcrumb" id="fb-breadcrumb">
           <span onclick="fbNavTo(0)">/</span>
           <span class="fb-sep">/</span>
           <span class="cur">server</span>
         </div>
+      </div>
+
+      <!-- Search bar -->
+      <div style="display:flex;margin-bottom:12px;flex-shrink:0">
         <div class="fb-search">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -2696,6 +2891,16 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
             Leeren
           </button>
         </div>
+      </div>
+
+      <div style="display:flex;margin-bottom:12px;flex-shrink:0">
+        <div class="con-search">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input type="text" id="con-search-input" placeholder="Ausgabe durchsuchen…" oninput="conSearch(this.value)">
+        </div>
+        <span class="con-search-count" id="con-search-count" style="display:flex;align-items:center;padding-left:10px"></span>
       </div>
 
       <div class="con-layout">
@@ -3126,6 +3331,19 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
         </div>
       </div>
 
+      <!-- Toolbar: search + filter (über beiden Boxen) -->
+      <div class="bk-toolbar">
+        <div class="bk-search">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input type="text" placeholder="Backup suchen…" oninput="bkFilter(this.value)">
+        </div>
+        <button class="bk-filter-btn active" id="bk-f-all"    onclick="bkSetFilter('all',this)">Alle</button>
+        <button class="bk-filter-btn"        id="bk-f-auto"   onclick="bkSetFilter('auto',this)">Auto</button>
+        <button class="bk-filter-btn"        id="bk-f-manual" onclick="bkSetFilter('manual',this)">Manuell</button>
+      </div>
+
       <!-- Main body: list + detail -->
       <div class="bk-body">
 
@@ -3141,18 +3359,6 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
               Backup-Verlauf
             </div>
             <span class="chip">14 Einträge</span>
-          </div>
-
-          <div class="bk-toolbar">
-            <div class="bk-search">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
-              <input type="text" placeholder="Backup suchen…" oninput="bkFilter(this.value)">
-            </div>
-            <button class="bk-filter-btn active" id="bk-f-all"    onclick="bkSetFilter('all',this)">Alle</button>
-            <button class="bk-filter-btn"        id="bk-f-auto"   onclick="bkSetFilter('auto',this)">Auto</button>
-            <button class="bk-filter-btn"        id="bk-f-manual" onclick="bkSetFilter('manual',this)">Manuell</button>
           </div>
 
           <div class="bk-list-scroll" id="bk-list-scroll">
@@ -3282,69 +3488,59 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
         </div>
       </div>
 
-      <!-- File dropdown -->
-      <div class="lg-file-bar" id="lg-file-bar">
-        <div class="lg-file-dropdown" id="lg-file-dropdown">
-          <button class="lg-file-select-btn" onclick="lgToggleDropdown(event)">
-            <span class="lg-tab-dot" style="background:var(--text-online)" id="lg-sel-dot"></span>
-            <span class="lg-sel-name" id="lg-sel-name">latest.log</span>
-            <span class="lg-sel-size" id="lg-sel-size">2.4 MB</span>
-            <svg class="lg-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
-          </button>
-          <div class="lg-file-menu">
-            <div class="lg-file-option selected" onclick="lgSelectOption(this,'latest','latest.log','2.4 MB',true)">
-              <span class="lg-tab-dot" style="background:var(--text-online)"></span>
-              <span class="lg-opt-name">latest.log</span>
-              <span class="lg-opt-size">2.4 MB</span>
-            </div>
-            <div class="lg-file-option" onclick="lgSelectOption(this,'2025-04-26','2025-04-26.log.gz','1.1 MB',false)">
-              <span class="lg-tab-dot" style="background:var(--text-muted)"></span>
-              <span class="lg-opt-name">2025-04-26.log.gz</span>
-              <span class="lg-opt-size">1.1 MB</span>
-            </div>
-            <div class="lg-file-option" onclick="lgSelectOption(this,'2025-04-25','2025-04-25.log.gz','980 KB',false)">
-              <span class="lg-tab-dot" style="background:var(--text-muted)"></span>
-              <span class="lg-opt-name">2025-04-25.log.gz</span>
-              <span class="lg-opt-size">980 KB</span>
-            </div>
-            <div class="lg-file-option" onclick="lgSelectOption(this,'2025-04-24','2025-04-24.log.gz','1.3 MB',false)">
-              <span class="lg-tab-dot" style="background:var(--text-muted)"></span>
-              <span class="lg-opt-name">2025-04-24.log.gz</span>
-              <span class="lg-opt-size">1.3 MB</span>
-            </div>
-          </div>
-        </div>
-        <div class="lg-file-bar-sp"></div>
-        <button class="lg-download-btn" onclick="lgDownload()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+      <!-- Toolbar: search + level filters (über der Karte) -->
+      <div class="lg-toolbar">
+        <div class="lg-search">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
           </svg>
-          .gz herunterladen
-        </button>
+          <input type="text" id="lg-search-input" placeholder="Suchen… (Regex mit /pattern/)" oninput="lgSearch(this.value)">
+        </div>
+
+        <!-- Level filter buttons -->
+        <button class="lg-level-btn lf-ok"   id="lg-f-ok"   onclick="lgToggleLevel('ok',this)"  >OK</button>
+        <button class="lg-level-btn lf-info"  id="lg-f-info" onclick="lgToggleLevel('info',this)">INFO</button>
+        <button class="lg-level-btn lf-warn"  id="lg-f-warn" onclick="lgToggleLevel('warn',this)">WARN</button>
+        <button class="lg-level-btn lf-error" id="lg-f-err"  onclick="lgToggleLevel('err',this)" >ERROR</button>
       </div>
 
       <!-- Log card -->
       <div class="lg-card">
 
-        <!-- Toolbar -->
-        <div class="lg-toolbar">
-          <div class="lg-search">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-            </svg>
-            <input type="text" id="lg-search-input" placeholder="Suchen… (Regex mit /pattern/)" oninput="lgSearch(this.value)">
+        <!-- Card header with file dropdown -->
+        <div class="bk-list-head-bar">
+          <div class="lg-file-dropdown" id="lg-file-dropdown">
+            <button class="lg-file-select-btn" onclick="lgToggleDropdown(event)">
+              <span class="lg-tab-dot" style="background:var(--text-online)" id="lg-sel-dot"></span>
+              <span class="lg-sel-name" id="lg-sel-name">latest.log</span>
+              <span class="lg-sel-size" id="lg-sel-size">2.4 MB</span>
+              <svg class="lg-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+            <div class="lg-file-menu">
+              <div class="lg-file-option selected" onclick="lgSelectOption(this,'latest','latest.log','2.4 MB',true)">
+                <span class="lg-tab-dot" style="background:var(--text-online)"></span>
+                <span class="lg-opt-name">latest.log</span>
+                <span class="lg-opt-size">2.4 MB</span>
+              </div>
+              <div class="lg-file-option" onclick="lgSelectOption(this,'2025-04-26','2025-04-26.log.gz','1.1 MB',false)">
+                <span class="lg-tab-dot" style="background:var(--text-muted)"></span>
+                <span class="lg-opt-name">2025-04-26.log.gz</span>
+                <span class="lg-opt-size">1.1 MB</span>
+              </div>
+              <div class="lg-file-option" onclick="lgSelectOption(this,'2025-04-25','2025-04-25.log.gz','980 KB',false)">
+                <span class="lg-tab-dot" style="background:var(--text-muted)"></span>
+                <span class="lg-opt-name">2025-04-25.log.gz</span>
+                <span class="lg-opt-size">980 KB</span>
+              </div>
+              <div class="lg-file-option" onclick="lgSelectOption(this,'2025-04-24','2025-04-24.log.gz','1.3 MB',false)">
+                <span class="lg-tab-dot" style="background:var(--text-muted)"></span>
+                <span class="lg-opt-name">2025-04-24.log.gz</span>
+                <span class="lg-opt-size">1.3 MB</span>
+              </div>
+            </div>
           </div>
-
-          <!-- Level filter buttons -->
-          <button class="lg-level-btn lf-ok"   id="lg-f-ok"   onclick="lgToggleLevel('ok',this)"  >OK</button>
-          <button class="lg-level-btn lf-info"  id="lg-f-info" onclick="lgToggleLevel('info',this)">INFO</button>
-          <button class="lg-level-btn lf-warn"  id="lg-f-warn" onclick="lgToggleLevel('warn',this)">WARN</button>
-          <button class="lg-level-btn lf-error" id="lg-f-err"  onclick="lgToggleLevel('err',this)" >ERROR</button>
-
-          <div class="lg-toolbar-sep"></div>
           <span class="lg-line-count" id="lg-line-count">4 218 Zeilen</span>
         </div>
 
@@ -3378,6 +3574,241 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
       </div>
 
     </div><!-- /page-logs -->
+
+    <!-- ═══ PAGE: UPTIME ═══ -->
+    <div id="page-uptime" class="page-uptime">
+
+      <div class="page-head" style="flex-shrink:0">
+        <div>
+          <div class="page-crumb">CraftAdmin › Survival World › Uptime</div>
+          <h1 class="page-title">Uptime</h1>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" onclick="toast('Statusseite öffnen…')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Statusseite
+          </button>
+          <button class="btn btn-ghost" onclick="toast('Benachrichtigungen konfigurieren…')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            Alerts
+          </button>
+        </div>
+      </div>
+
+      <!-- Hero banner -->
+      <div class="up-hero">
+        <div class="up-hero-status">
+          <div class="up-pulse-ring"><div class="up-pulse-dot"></div></div>
+          <div class="up-hero-label">ONLINE</div>
+        </div>
+        <div class="up-hero-info">
+          <div class="up-hero-title">Server läuft stabil</div>
+          <div class="up-hero-sub">Laufzeit: <strong style="color:var(--text-primary)">6 Tage, 14 Stunden, 32 Minuten</strong> · Gestartet: 21.04.2025, 09:41 Uhr</div>
+        </div>
+        <div class="up-hero-kpis">
+          <div class="up-kpi">
+            <div class="up-kpi-val good">99.7%</div>
+            <div class="up-kpi-label">Uptime (30d)</div>
+          </div>
+          <div class="up-kpi">
+            <div class="up-kpi-val">4</div>
+            <div class="up-kpi-label">Incidents (90d)</div>
+          </div>
+          <div class="up-kpi">
+            <div class="up-kpi-val warn">23 min</div>
+            <div class="up-kpi-label">Ø Downtime</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stat tiles -->
+      <div class="up-stat-row">
+        <div class="stat-tile">
+          <div class="stat-label">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            Aktuelle Laufzeit
+          </div>
+          <div class="stat-value good">6d 14h</div>
+          <div class="stat-sub">Seit 21.04. · 09:41 Uhr</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-label">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            Uptime (7 Tage)
+          </div>
+          <div class="stat-value good">100%</div>
+          <div class="stat-sub">Kein Ausfall</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-label">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            Uptime (30 Tage)
+          </div>
+          <div class="stat-value good">99.7%</div>
+          <div class="stat-sub">1 Ausfall · 23 min</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-label">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            Uptime (90 Tage)
+          </div>
+          <div class="stat-value">99.1%</div>
+          <div class="stat-sub">4 Ausfälle · Ø 23 min</div>
+          <div class="stat-prog"><div class="stat-pf" style="width:99.1%"></div></div>
+        </div>
+      </div>
+
+      <!-- 90-day bar strip -->
+      <div class="up-90day-card">
+        <div class="up-90day-head">
+          <div class="up-90day-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            90-Tage-Übersicht
+          </div>
+          <span class="chip">Jeder Balken = 1 Tag</span>
+        </div>
+        <div class="up-90day-body">
+          <div class="up-bar-strip" id="up-bar-strip"></div>
+          <div class="up-bar-labels">
+            <span>Vor 90 Tagen</span>
+            <span>Vor 45 Tagen</span>
+            <span>Heute</span>
+          </div>
+          <div class="up-legend">
+            <div class="up-legend-item"><div class="up-legend-dot" style="background:var(--text-online)"></div>Online</div>
+            <div class="up-legend-item"><div class="up-legend-dot" style="background:var(--text-warn)"></div>Teilausfall</div>
+            <div class="up-legend-item"><div class="up-legend-dot" style="background:var(--text-error)"></div>Ausfall</div>
+            <div class="up-legend-item"><div class="up-legend-dot" style="background:var(--border)"></div>Keine Daten</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Uptime chart -->
+      <div class="up-chart-card">
+        <div class="up-chart-head">
+          <div class="up-chart-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            Tägliche Uptime
+          </div>
+          <div class="up-range-btns">
+            <button class="up-range-btn" onclick="upSetRange(7,this)">7d</button>
+            <button class="up-range-btn active" onclick="upSetRange(30,this)">30d</button>
+            <button class="up-range-btn" onclick="upSetRange(90,this)">90d</button>
+          </div>
+        </div>
+        <div class="up-chart-body">
+          <svg class="up-chart-svg" id="up-chart-svg" height="120" viewBox="0 0 800 120" preserveAspectRatio="none"></svg>
+        </div>
+      </div>
+
+      <!-- Incident list -->
+      <div class="up-timeline-card">
+        <div class="up-timeline-head">
+          <div class="up-timeline-title">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+            </svg>
+            Incidents (90 Tage)
+          </div>
+          <span class="chip">4 Einträge</span>
+        </div>
+
+        <div class="up-inc-row">
+          <div class="up-inc-icon degraded">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div class="up-inc-info">
+            <div class="up-inc-title">Hohe Latenz — Server überlastet</div>
+            <div class="up-inc-meta">
+              <span>25.04.2025, 11:00–11:23 Uhr</span>
+              <span>TPS: 8.2 → Erholt</span>
+              <span class="up-inc-tag degraded">Teilausfall</span>
+            </div>
+          </div>
+          <div class="up-inc-dur">23 min</div>
+        </div>
+
+        <div class="up-inc-row">
+          <div class="up-inc-icon down">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+            </svg>
+          </div>
+          <div class="up-inc-info">
+            <div class="up-inc-title">Server nicht erreichbar — OOM Crash</div>
+            <div class="up-inc-meta">
+              <span>19.04.2025, 03:14–03:41 Uhr</span>
+              <span>java.lang.OutOfMemoryError: GC overhead limit exceeded</span>
+              <span class="up-inc-tag down">Ausfall</span>
+            </div>
+          </div>
+          <div class="up-inc-dur">27 min</div>
+        </div>
+
+        <div class="up-inc-row">
+          <div class="up-inc-icon down">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+            </svg>
+          </div>
+          <div class="up-inc-info">
+            <div class="up-inc-title">Geplante Wartung — Update auf 1.20.4</div>
+            <div class="up-inc-meta">
+              <span>08.04.2025, 04:00–04:18 Uhr</span>
+              <span>Manueller Neustart nach Plugin-Update</span>
+              <span class="up-inc-tag down">Wartung</span>
+            </div>
+          </div>
+          <div class="up-inc-dur">18 min</div>
+        </div>
+
+        <div class="up-inc-row">
+          <div class="up-inc-icon degraded">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div class="up-inc-info">
+            <div class="up-inc-title">Verbindungsabbrüche — Netzwerkproblem</div>
+            <div class="up-inc-meta">
+              <span>28.03.2025, 19:52–20:15 Uhr</span>
+              <span>Paketloss 34% · ISP-seitig behoben</span>
+              <span class="up-inc-tag degraded">Teilausfall</span>
+            </div>
+          </div>
+          <div class="up-inc-dur">23 min</div>
+        </div>
+
+      </div>
+
+    </div><!-- /page-uptime -->
 
   </div><!-- /content -->
 
@@ -3720,6 +4151,7 @@ const PAGES = {
   'Weltkarte':   'page-worldmap',
   'Backups':     'page-backups',
   'Logs':        'page-logs',
+  'Uptime':      'page-uptime',
 };
 
 function nav(el, e) {
@@ -3731,7 +4163,7 @@ function nav(el, e) {
   const pageId = PAGES[label];
 
   // Hide all pages
-  document.querySelectorAll('.page-dashboard, .page-files, .page-console, .page-players, .page-perf, .page-worldmap, .page-backups, .page-logs').forEach(p => p.classList.remove('active-page'));
+  document.querySelectorAll('.page-dashboard, .page-files, .page-console, .page-players, .page-perf, .page-worldmap, .page-backups, .page-logs, .page-uptime').forEach(p => p.classList.remove('active-page'));
 
   if (pageId) {
     document.getElementById(pageId).classList.add('active-page');
@@ -3742,6 +4174,7 @@ function nav(el, e) {
     if (pageId === 'page-worldmap') mapInit();
     if (pageId === 'page-backups')  bkInit();
     if (pageId === 'page-logs')     lgInit();
+    if (pageId === 'page-uptime')   upInit();
   } else {
     document.getElementById('page-dashboard').classList.add('active-page');
     toast('Seite: ' + label + ' (noch nicht implementiert)');
@@ -3885,6 +4318,42 @@ function conFilter(btn, lv) {
   document.querySelectorAll('.con-line').forEach(line => {
     line.classList.toggle('hidden', !conActiveFilters.has(line.dataset.lv));
   });
+  conApplySearch();
+}
+
+/**
+ * Filter console lines by search text.
+ * @param {string} val
+ */
+function conSearch(val) {
+  conApplySearch(val);
+}
+
+/** Apply current search term to all visible console lines. */
+function conApplySearch(val) {
+  const input = document.getElementById('con-search-input');
+  const query = (val !== undefined ? val : (input ? input.value : '')).trim().toLowerCase();
+  const lines  = document.querySelectorAll('.con-line');
+  let matches = 0;
+
+  lines.forEach(line => {
+    if (line.classList.contains('hidden')) return;
+    if (!query) {
+      line.style.display = '';
+      return;
+    }
+    const text = (line.textContent || '').toLowerCase();
+    const hit  = text.includes(query);
+    line.style.display = hit ? '' : 'none';
+    if (hit) matches++;
+  });
+
+  const countEl = document.getElementById('con-search-count');
+  if (countEl) {
+    countEl.textContent = query
+      ? `${matches} Treffer`
+      : '';
+  }
 }
 
 /** Clear the console output. */
@@ -5858,6 +6327,123 @@ function lgDownload() {
 /** Rotate log file */
 function lgRotate() {
   toast('Log rotiert — neue Datei: latest.log');
+}
+
+
+// ── UPTIME PAGE ────────────────────────────────────────────────────────────
+
+/** Current chart range in days. */
+let upRange = 30;
+
+/**
+ * Generate deterministic uptime percentage for a day offset.
+ * @param {number} daysAgo
+ * @returns {number} 0–100
+ */
+function upDayPct(daysAgo) {
+  // Known incident days get specific values
+  const incidents = { 2: 100, 8: 96.0, 19: 98.1, 30: 100, 50: 98.4 };
+  if (incidents[daysAgo] !== undefined) return incidents[daysAgo];
+  // Pseudo-random stable value — almost always 100
+  const h = ((daysAgo * 2654435769) >>> 0) % 1000;
+  return h < 5 ? 95 + (h % 5) : 100;
+}
+
+/** Map pct to bar state */
+function upBarState(pct) {
+  if (pct >= 99.9) return 'up';
+  if (pct >= 90)   return 'partial';
+  return 'down';
+}
+
+/** Initialise the uptime page. */
+function upInit() {
+  upRender90();
+  upRenderChart();
+}
+
+/** Render the 90-day bar strip. */
+function upRender90() {
+  const strip = document.getElementById('up-bar-strip');
+  if (!strip) return;
+  const bars = [];
+  for (let d = 89; d >= 0; d--) {
+    const pct   = upDayPct(d);
+    const state = d < 89 ? upBarState(pct) : 'no-data'; // oldest day no data
+    const h     = state === 'up' ? 32 : state === 'partial' ? 24 : state === 'down' ? 20 : 10;
+    bars.push(`<div class="up-bar ${state}" style="height:${h}px" title="${d === 0 ? 'Heute' : 'Vor '+d+' Tagen'}: ${state === 'no-data' ? 'Keine Daten' : pct.toFixed(1)+'%'}"></div>`);
+  }
+  strip.innerHTML = bars.join('');
+}
+
+/**
+ * Render the uptime line chart.
+ */
+function upRenderChart() {
+  const svg = document.getElementById('up-chart-svg');
+  if (!svg) return;
+
+  const days = [];
+  for (let d = upRange - 1; d >= 0; d--) days.push(upDayPct(d));
+
+  const W = 800, H = 120, pad = { t: 10, b: 20, l: 4, r: 4 };
+  const cw = W - pad.l - pad.r;
+  const ch = H - pad.t - pad.b;
+  const minV = 94, maxV = 100.1;
+
+  const x = i => pad.l + (i / (days.length - 1)) * cw;
+  const y = v => pad.t + ch - ((v - minV) / (maxV - minV)) * ch;
+
+  // Grid lines
+  let grid = '';
+  [100, 99, 98, 97, 95].forEach(v => {
+    const yy = y(v);
+    grid += `<line x1="${pad.l}" y1="${yy.toFixed(1)}" x2="${W - pad.r}" y2="${yy.toFixed(1)}" stroke="var(--border-subtle)" stroke-width="1"/>`;
+    grid += `<text x="${pad.l}" y="${(yy - 3).toFixed(1)}" font-size="8" fill="var(--text-muted)" font-family="monospace">${v}%</text>`;
+  });
+
+  // Area path
+  const pts = days.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const firstX = x(0).toFixed(1), lastX = x(days.length - 1).toFixed(1);
+  const baseY = (pad.t + ch).toFixed(1);
+
+  const area = `M ${firstX},${baseY} L ${pts.split(' ').map((p,i) => `${x(i).toFixed(1)},${y(days[i]).toFixed(1)}`).join(' L ')} L ${lastX},${baseY} Z`
+    .replace('M  L ', 'M ');
+
+  // Recalc proper area
+  const polyPts = days.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`);
+  const areaPath = `M ${firstX},${baseY} L ${polyPts.join(' L ')} L ${lastX},${baseY} Z`;
+  const linePath = `M ${polyPts.join(' L ')}`;
+
+  // Incident markers (red dots where pct < 100)
+  const markers = days.map((v, i) => v < 99.9
+    ? `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3" fill="var(--text-warn)" stroke="var(--bg-card)" stroke-width="1.5"/>`
+    : '').join('');
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="upAreaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="var(--accent)" stop-opacity="0.18"/>
+        <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    ${grid}
+    <path d="${areaPath}" fill="url(#upAreaGrad)"/>
+    <path d="${linePath}" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    ${markers}
+  `;
+}
+
+/**
+ * Switch chart range.
+ * @param {number} days
+ * @param {HTMLElement} btn
+ */
+function upSetRange(days, btn) {
+  upRange = days;
+  document.querySelectorAll('.up-range-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  upRenderChart();
 }
 
 </script>
