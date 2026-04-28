@@ -1924,19 +1924,43 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
   display: flex; align-items: center; gap: 8px; flex-shrink: 0;
   margin-bottom: 11px;
 }
-.lg-file-tab {
-  display: flex; align-items: center; gap: 6px;
+.lg-file-bar-sp { flex: 1; }
+/* File dropdown */
+.lg-file-dropdown { position: relative; }
+.lg-file-select-btn {
+  display: flex; align-items: center; gap: 8px;
   padding: 5px 11px; border-radius: var(--r-md);
   background: var(--bg-card); border: 1px solid var(--border);
   font-family: var(--font-mono); font-size: 10.5px; font-weight: 500;
-  color: var(--text-secondary); cursor: pointer;
-  transition: all var(--t); white-space: nowrap;
+  color: var(--text-primary); cursor: pointer;
+  transition: all var(--t); white-space: nowrap; min-width: 200px;
 }
-.lg-file-tab:hover { background: var(--bg-hover); color: var(--text-primary); border-color: var(--border-focus); }
-.lg-file-tab.active { background: var(--bg-active); color: var(--text-primary); border-color: var(--border-focus); }
-.lg-file-tab .lg-tab-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-.lg-file-tab .lg-tab-size { font-size: 9.5px; color: var(--text-muted); margin-left: 2px; }
-.lg-file-bar-sp { flex: 1; }
+.lg-file-select-btn:hover { border-color: var(--border-focus); background: var(--bg-hover); }
+.lg-file-select-btn .lg-tab-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.lg-file-select-btn .lg-sel-name { flex: 1; text-align: left; }
+.lg-file-select-btn .lg-sel-size { font-size: 9.5px; color: var(--text-muted); }
+.lg-file-select-btn .lg-chevron { color: var(--text-muted); transition: transform var(--t); }
+.lg-file-dropdown.open .lg-chevron { transform: rotate(180deg); }
+.lg-file-menu {
+  display: none; position: absolute; top: calc(100% + 5px); left: 0;
+  min-width: 100%; background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r-md); overflow: hidden; z-index: 200;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+.lg-file-dropdown.open .lg-file-menu { display: block; }
+.lg-file-option {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 12px; cursor: pointer;
+  font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--text-secondary); transition: background var(--t);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.lg-file-option:last-child { border-bottom: none; }
+.lg-file-option:hover { background: var(--bg-hover); color: var(--text-primary); }
+.lg-file-option.selected { background: var(--bg-active); color: var(--text-primary); }
+.lg-file-option .lg-tab-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.lg-file-option .lg-opt-name { flex: 1; }
+.lg-file-option .lg-opt-size { font-size: 9.5px; color: var(--text-muted); }
 .lg-download-btn {
   display: flex; align-items: center; gap: 6px;
   padding: 5px 11px; border-radius: var(--r-md);
@@ -3258,28 +3282,40 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
         </div>
       </div>
 
-      <!-- File tab bar -->
+      <!-- File dropdown -->
       <div class="lg-file-bar" id="lg-file-bar">
-        <button class="lg-file-tab active" onclick="lgSelectFile(this,'latest')" data-file="latest">
-          <span class="lg-tab-dot" style="background:var(--text-online)"></span>
-          latest.log
-          <span class="lg-tab-size">2.4 MB</span>
-        </button>
-        <button class="lg-file-tab" onclick="lgSelectFile(this,'2025-04-26')" data-file="2025-04-26">
-          <span class="lg-tab-dot" style="background:var(--text-muted)"></span>
-          2025-04-26.log.gz
-          <span class="lg-tab-size">1.1 MB</span>
-        </button>
-        <button class="lg-file-tab" onclick="lgSelectFile(this,'2025-04-25')" data-file="2025-04-25">
-          <span class="lg-tab-dot" style="background:var(--text-muted)"></span>
-          2025-04-25.log.gz
-          <span class="lg-tab-size">980 KB</span>
-        </button>
-        <button class="lg-file-tab" onclick="lgSelectFile(this,'2025-04-24')" data-file="2025-04-24">
-          <span class="lg-tab-dot" style="background:var(--text-muted)"></span>
-          2025-04-24.log.gz
-          <span class="lg-tab-size">1.3 MB</span>
-        </button>
+        <div class="lg-file-dropdown" id="lg-file-dropdown">
+          <button class="lg-file-select-btn" onclick="lgToggleDropdown(event)">
+            <span class="lg-tab-dot" style="background:var(--text-online)" id="lg-sel-dot"></span>
+            <span class="lg-sel-name" id="lg-sel-name">latest.log</span>
+            <span class="lg-sel-size" id="lg-sel-size">2.4 MB</span>
+            <svg class="lg-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+          <div class="lg-file-menu">
+            <div class="lg-file-option selected" onclick="lgSelectOption(this,'latest','latest.log','2.4 MB',true)">
+              <span class="lg-tab-dot" style="background:var(--text-online)"></span>
+              <span class="lg-opt-name">latest.log</span>
+              <span class="lg-opt-size">2.4 MB</span>
+            </div>
+            <div class="lg-file-option" onclick="lgSelectOption(this,'2025-04-26','2025-04-26.log.gz','1.1 MB',false)">
+              <span class="lg-tab-dot" style="background:var(--text-muted)"></span>
+              <span class="lg-opt-name">2025-04-26.log.gz</span>
+              <span class="lg-opt-size">1.1 MB</span>
+            </div>
+            <div class="lg-file-option" onclick="lgSelectOption(this,'2025-04-25','2025-04-25.log.gz','980 KB',false)">
+              <span class="lg-tab-dot" style="background:var(--text-muted)"></span>
+              <span class="lg-opt-name">2025-04-25.log.gz</span>
+              <span class="lg-opt-size">980 KB</span>
+            </div>
+            <div class="lg-file-option" onclick="lgSelectOption(this,'2025-04-24','2025-04-24.log.gz','1.3 MB',false)">
+              <span class="lg-tab-dot" style="background:var(--text-muted)"></span>
+              <span class="lg-opt-name">2025-04-24.log.gz</span>
+              <span class="lg-opt-size">1.3 MB</span>
+            </div>
+          </div>
+        </div>
         <div class="lg-file-bar-sp"></div>
         <button class="lg-download-btn" onclick="lgDownload()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -4108,7 +4144,7 @@ function plRender() {
     const pingClass = pingMs === null ? '' : pingMs < 50 ? 'good' : pingMs < 100 ? 'warn' : 'bad';
     const isSelected = plSelectedPlayer && plSelectedPlayer.name === p.name;
 
-    return `<div class="pl-row${isSelected ? ' selected':''}" onclick="plSelectPlayer(${i})">
+    return `<div class="pl-row${isSelected ? ' selected':''}" onclick="plSelectPlayer('${p.name}')">
       <div class="pl-name-cell">
         <div class="pl-avatar${p.op?' op':''}">
           <img src="https://mc-heads.net/avatar/${p.name}/26"
@@ -4142,10 +4178,12 @@ function plWorldLabel(w) {
   return map[w] || w;
 }
 
-/** Select a player row and show detail panel. */
-function plSelectPlayer(idx) {
+/** Select a player row and show detail panel.
+ * @param {string} name
+ */
+function plSelectPlayer(name) {
   const list = plGetList();
-  plSelectedPlayer = list[idx] || null;
+  plSelectedPlayer = plApplySort(list).find(p => p.name === name) || null;
   plRender();
   if (plSelectedPlayer) plShowDetail(plSelectedPlayer);
   else plClearDetail();
@@ -5079,6 +5117,8 @@ function mapSelectDim(world, label, el) {
 document.addEventListener('click', e => {
   const wrap = document.getElementById('map-dim-wrap');
   if (wrap && !wrap.contains(e.target)) wrap.classList.remove('open');
+  const lgDd = document.getElementById('lg-file-dropdown');
+  if (lgDd && !lgDd.contains(e.target)) lgDd.classList.remove('open');
 });
 
 
@@ -5716,12 +5756,42 @@ function lgRender() {
  * @param {HTMLElement} btn
  * @param {string} fileKey
  */
-function lgSelectFile(btn, fileKey) {
+/** Toggle the file dropdown open/closed. */
+function lgToggleDropdown(e) {
+  e.stopPropagation();
+  document.getElementById('lg-file-dropdown').classList.toggle('open');
+}
+
+/**
+ * Select a log file from the dropdown.
+ * @param {HTMLElement} el  - The clicked option element
+ * @param {string} fileKey
+ * @param {string} name
+ * @param {string} size
+ * @param {boolean} isLive
+ */
+function lgSelectOption(el, fileKey, name, size, isLive) {
   lgCurrentFile = fileKey;
-  document.querySelectorAll('.lg-file-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+
+  // Update button label
+  const dot  = document.getElementById('lg-sel-dot');
+  const selName = document.getElementById('lg-sel-name');
+  const selSize = document.getElementById('lg-sel-size');
+  if (dot)     dot.style.background  = isLive ? 'var(--text-online)' : 'var(--text-muted)';
+  if (selName) selName.textContent   = name;
+  if (selSize) selSize.textContent   = size;
+
+  // Update selected state in menu
+  document.querySelectorAll('.lg-file-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+
+  // Close dropdown
+  document.getElementById('lg-file-dropdown').classList.remove('open');
+
+  // Update status bar
   const sbFile = document.getElementById('lg-sb-file');
-  if (sbFile) sbFile.textContent = btn.textContent.trim().split('\n')[0].trim();
+  if (sbFile) sbFile.textContent = name;
+
   lgRender();
 }
 
