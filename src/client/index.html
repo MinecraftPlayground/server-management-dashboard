@@ -2232,6 +2232,121 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
 .up-legend-item { display: flex; align-items: center; gap: 5px; }
 .up-legend-dot  { width: 8px; height: 8px; border-radius: 2px; }
 
+
+/* ── SETTINGS PAGE ── */
+.page-settings { display: none; }
+.page-settings.active-page {
+  display: flex; flex-direction: column; flex: 1; min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.page-settings.active-page::-webkit-scrollbar { width: 5px; }
+.page-settings.active-page::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* Settings layout: content left, TOC right */
+.st-layout {
+  display: grid; grid-template-columns: 1fr 200px;
+  gap: 11px; align-items: start;
+}
+
+/* Left: settings cards */
+.st-sections {
+  display: flex; flex-direction: column; gap: 11px; min-width: 0;
+}
+
+/* Right: sticky TOC — sticks relative to the page scroll container */
+.st-nav-wrap { position: sticky; top: 0; }
+.st-nav {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.st-nav-btn {
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px 11px; border-radius: var(--r-md);
+  background: transparent; border: none; cursor: pointer;
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--text-secondary); text-align: left; width: 100%;
+  transition: all var(--t);
+}
+.st-nav-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.st-nav-btn.active { background: var(--bg-active); color: var(--text-primary); }
+.st-nav-btn svg { color: var(--text-muted); flex-shrink: 0; }
+.st-nav-btn.active svg { color: var(--accent); }
+.st-nav-sep { height: 1px; background: var(--border-subtle); margin: 6px 0; }
+
+/* Section content */
+
+/* Settings card */
+.st-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+}
+.st-card-head {
+  padding: 11px 16px; border-bottom: 1px solid var(--border-subtle);
+  display: flex; align-items: center; gap: 9px;
+}
+.st-card-title {
+  font-size: 12.5px; font-weight: 600; color: var(--text-primary);
+}
+.st-card-sub {
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 1px;
+}
+.st-card-head svg { color: var(--text-muted); flex-shrink: 0; }
+
+/* Setting row */
+.st-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 16px; border-bottom: 1px solid var(--border-subtle); gap: 20px;
+}
+.st-row:last-child { border-bottom: none; }
+.st-row-info { flex: 1; min-width: 0; }
+.st-row-label { font-size: 12px; font-weight: 500; color: var(--text-primary); margin-bottom: 2px; }
+.st-row-desc  { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); }
+.st-row-ctrl  { flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
+
+/* Toggle switch */
+.st-toggle {
+  position: relative; width: 36px; height: 20px; cursor: pointer; flex-shrink: 0;
+}
+.st-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+.st-toggle-track {
+  position: absolute; inset: 0; border-radius: 10px;
+  background: var(--border); transition: background var(--t);
+}
+.st-toggle input:checked ~ .st-toggle-track { background: var(--accent); }
+.st-toggle-thumb {
+  position: absolute; top: 3px; left: 3px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--text-primary); transition: transform var(--t);
+}
+.st-toggle input:checked ~ .st-toggle-thumb { transform: translateX(16px); }
+
+/* Select / Input */
+.st-select {
+  background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 5px 9px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-primary);
+  cursor: pointer; transition: border-color var(--t); outline: none;
+}
+.st-select:focus { border-color: var(--border-focus); }
+.st-input {
+  background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 5px 9px; width: 120px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-primary);
+  transition: border-color var(--t); outline: none;
+}
+.st-input:focus { border-color: var(--border-focus); }
+.st-input-wide { width: 200px; }
+.st-input-unit {
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
+}
+
+/* Danger zone */
+.st-danger-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 16px; border-bottom: 1px solid var(--border-subtle); gap: 20px;
+}
+.st-danger-row:last-child { border-bottom: none; }
+.st-danger-row .st-row-label { color: var(--text-error); }
 </style>
 </head>
 <body>
@@ -2444,7 +2559,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
       </svg>
       <span class="nav-text">Einklappen</span>
     </button>
-    <a class="nav-link" href="#" onclick="nav(this,event)">
+    <a class="nav-link" href="#" data-nav onclick="nav(this,event)">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="3"/>
         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -3810,6 +3925,446 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
 
     </div><!-- /page-uptime -->
 
+    <!-- ═══ PAGE: EINSTELLUNGEN ═══ -->
+    <div id="page-settings" class="page-settings">
+
+      <div class="page-head" style="flex-shrink:0">
+        <div>
+          <div class="page-crumb">CraftAdmin › Survival World › Einstellungen</div>
+          <h1 class="page-title">Einstellungen</h1>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" onclick="stReset()">Zurücksetzen</button>
+          <button class="btn btn-primary" onclick="stSave()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17 21 17 13 7 13 7 21"/>
+              <polyline points="7 3 7 8 15 8"/>
+            </svg>
+            Speichern
+          </button>
+        </div>
+      </div>
+
+      <div class="st-layout">
+
+        <!-- Section content -->
+        <div class="st-sections">
+
+          <!-- SERVER -->
+          <div class="st-card" id="st-server">
+            <div class="st-card-head">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+              <div>
+                <div class="st-card-title">Server</div>
+                <div class="st-card-sub">Grundlegende Servereinstellungen aus server.properties</div>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Server-Name (MOTD)</div>
+                <div class="st-row-desc">Wird im Minecraft-Launcher als Servername angezeigt</div>
+              </div>
+              <div class="st-row-ctrl">
+                <input class="st-input st-input-wide" type="text" value="Survival World · CraftAdmin" id="st-motd">
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Max. Spieler</div>
+                <div class="st-row-desc">Maximale Anzahl gleichzeitiger Verbindungen</div>
+              </div>
+              <div class="st-row-ctrl">
+                <input class="st-input" type="number" value="20" min="1" max="1000" id="st-maxplayers">
+                <span class="st-input-unit">Spieler</span>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Schwierigkeitsgrad</div>
+                <div class="st-row-desc">Schwierigkeit der Welt (peaceful / easy / normal / hard)</div>
+              </div>
+              <div class="st-row-ctrl">
+                <select class="st-select" id="st-difficulty">
+                  <option>peaceful</option>
+                  <option>easy</option>
+                  <option selected>normal</option>
+                  <option>hard</option>
+                </select>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Spielmodus</div>
+                <div class="st-row-desc">Standard-Spielmodus für neue Spieler</div>
+              </div>
+              <div class="st-row-ctrl">
+                <select class="st-select" id="st-gamemode">
+                  <option selected>survival</option>
+                  <option>creative</option>
+                  <option>adventure</option>
+                  <option>spectator</option>
+                </select>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Online-Modus</div>
+                <div class="st-row-desc">Spieler gegen Mojang-Server authentifizieren (empfohlen)</div>
+              </div>
+              <div class="st-row-ctrl">
+                <label class="st-toggle">
+                  <input type="checkbox" checked onchange="toast('Online-Modus: '+(this.checked?'AN':'AUS'))">
+                  <div class="st-toggle-track"></div>
+                  <div class="st-toggle-thumb"></div>
+                </label>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Whitelist</div>
+                <div class="st-row-desc">Nur Spieler auf der Whitelist dürfen beitreten</div>
+              </div>
+              <div class="st-row-ctrl">
+                <label class="st-toggle">
+                  <input type="checkbox" onchange="toast('Whitelist: '+(this.checked?'AN':'AUS'))">
+                  <div class="st-toggle-track"></div>
+                  <div class="st-toggle-thumb"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- GAMEPLAY -->
+          <div class="st-card" id="st-gameplay">
+            <div class="st-card-head">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/>
+                <circle cx="15" cy="12" r="1"/><circle cx="18" cy="10" r="1"/>
+                <path d="M17.92 12a5 5 0 1 1-5.92-4.9V4h2v3.1A5 5 0 0 1 17.92 12z"/>
+              </svg>
+              <div>
+                <div class="st-card-title">Gameplay</div>
+                <div class="st-card-sub">Spielmechanik und Weltgenerierung</div>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">PvP</div>
+                <div class="st-row-desc">Spieler können sich gegenseitig Schaden zufügen</div>
+              </div>
+              <div class="st-row-ctrl">
+                <label class="st-toggle">
+                  <input type="checkbox" checked onchange="toast('PvP: '+(this.checked?'AN':'AUS'))">
+                  <div class="st-toggle-track"></div>
+                  <div class="st-toggle-thumb"></div>
+                </label>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Spawn-Schutz</div>
+                <div class="st-row-desc">Radius um den Spawn-Punkt, der vor Zerstörung geschützt ist</div>
+              </div>
+              <div class="st-row-ctrl">
+                <input class="st-input" type="number" value="16" min="0" max="256">
+                <span class="st-input-unit">Blöcke</span>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Sichtweite</div>
+                <div class="st-row-desc">Geladene Chunks rund um jeden Spieler</div>
+              </div>
+              <div class="st-row-ctrl">
+                <input class="st-input" type="number" value="10" min="3" max="32">
+                <span class="st-input-unit">Chunks</span>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Mob-Spawning</div>
+                <div class="st-row-desc">Feindliche Mobs spawnen in der Welt</div>
+              </div>
+              <div class="st-row-ctrl">
+                <label class="st-toggle">
+                  <input type="checkbox" checked onchange="toast('Mob-Spawning: '+(this.checked?'AN':'AUS'))">
+                  <div class="st-toggle-track"></div>
+                  <div class="st-toggle-thumb"></div>
+                </label>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Nether</div>
+                <div class="st-row-desc">Spieler können den Nether betreten</div>
+              </div>
+              <div class="st-row-ctrl">
+                <label class="st-toggle">
+                  <input type="checkbox" checked onchange="toast('Nether: '+(this.checked?'AN':'AUS'))">
+                  <div class="st-toggle-track"></div>
+                  <div class="st-toggle-thumb"></div>
+                </label>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">End</div>
+                <div class="st-row-desc">Spieler können The End betreten</div>
+              </div>
+              <div class="st-row-ctrl">
+                <label class="st-toggle">
+                  <input type="checkbox" checked onchange="toast('End: '+(this.checked?'AN':'AUS'))">
+                  <div class="st-toggle-track"></div>
+                  <div class="st-toggle-thumb"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- NETZWERK -->
+          <div class="st-card" id="st-netzwerk">
+            <div class="st-card-head">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <div>
+                <div class="st-card-title">Netzwerk</div>
+                <div class="st-card-sub">Port, IP und Verbindungseinstellungen</div>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Server-Port</div>
+                <div class="st-row-desc">TCP-Port auf dem der Server lauscht (Standard: 25565)</div>
+              </div>
+              <div class="st-row-ctrl">
+                <input class="st-input" type="number" value="25565" min="1024" max="65535">
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Server-IP (Bind)</div>
+                <div class="st-row-desc">Leer lassen um auf allen Interfaces zu lauschen</div>
+              </div>
+              <div class="st-row-ctrl">
+                <input class="st-input st-input-wide" type="text" placeholder="0.0.0.0">
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Netzwerk-Komprimierung</div>
+                <div class="st-row-desc">Pakete ab dieser Größe komprimieren (-1 = deaktiviert)</div>
+              </div>
+              <div class="st-row-ctrl">
+                <input class="st-input" type="number" value="256" min="-1">
+                <span class="st-input-unit">Bytes</span>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Query aktivieren</div>
+                <div class="st-row-desc">UDP-Query-Protokoll für externe Serverüberwachung</div>
+              </div>
+              <div class="st-row-ctrl">
+                <label class="st-toggle">
+                  <input type="checkbox" onchange="toast('Query: '+(this.checked?'AN':'AUS'))">
+                  <div class="st-toggle-track"></div>
+                  <div class="st-toggle-thumb"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- RCON -->
+          <div class="st-card" id="st-rcon">
+            <div class="st-card-head">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>
+              </svg>
+              <div>
+                <div class="st-card-title">RCON</div>
+                <div class="st-card-sub">Remote-Konsole für externe Verwaltung</div>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">RCON aktivieren</div>
+                <div class="st-row-desc">Fernzugriff auf die Serverkonsole per RCON-Protokoll</div>
+              </div>
+              <div class="st-row-ctrl">
+                <label class="st-toggle">
+                  <input type="checkbox" id="st-rcon-toggle" onchange="stToggleRcon(this)">
+                  <div class="st-toggle-track"></div>
+                  <div class="st-toggle-thumb"></div>
+                </label>
+              </div>
+            </div>
+            <div class="st-row" id="st-rcon-port-row" style="opacity:0.4;pointer-events:none">
+              <div class="st-row-info">
+                <div class="st-row-label">RCON-Port</div>
+                <div class="st-row-desc">Port für RCON-Verbindungen (Standard: 25575)</div>
+              </div>
+              <div class="st-row-ctrl">
+                <input class="st-input" type="number" value="25575">
+              </div>
+            </div>
+            <div class="st-row" id="st-rcon-pw-row" style="opacity:0.4;pointer-events:none">
+              <div class="st-row-info">
+                <div class="st-row-label">RCON-Passwort</div>
+                <div class="st-row-desc">Passwort für die RCON-Authentifizierung</div>
+              </div>
+              <div class="st-row-ctrl">
+                <input class="st-input st-input-wide" type="password" placeholder="••••••••••••">
+              </div>
+            </div>
+          </div>
+
+          <!-- RESSOURCEN -->
+          <div class="st-card" id="st-ressourcen">
+            <div class="st-card-head">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+              <div>
+                <div class="st-card-title">Ressourcen</div>
+                <div class="st-card-sub">JVM-Speicher und Performance-Einstellungen</div>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Heap-Speicher (Xmx)</div>
+                <div class="st-row-desc">Maximaler Java-Heap-Speicher</div>
+              </div>
+              <div class="st-row-ctrl">
+                <input class="st-input" type="number" value="4096" min="512" step="512">
+                <span class="st-input-unit">MB</span>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Min. Heap-Speicher (Xms)</div>
+                <div class="st-row-desc">Initialer Java-Heap-Speicher beim Start</div>
+              </div>
+              <div class="st-row-ctrl">
+                <input class="st-input" type="number" value="1024" min="256" step="256">
+                <span class="st-input-unit">MB</span>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Auto-Neustart bei Absturz</div>
+                <div class="st-row-desc">Server automatisch neu starten wenn er unerwartet beendet wird</div>
+              </div>
+              <div class="st-row-ctrl">
+                <label class="st-toggle">
+                  <input type="checkbox" checked onchange="toast('Auto-Neustart: '+(this.checked?'AN':'AUS'))">
+                  <div class="st-toggle-track"></div>
+                  <div class="st-toggle-thumb"></div>
+                </label>
+              </div>
+            </div>
+            <div class="st-row">
+              <div class="st-row-info">
+                <div class="st-row-label">Zusätzliche JVM-Flags</div>
+                <div class="st-row-desc">Erweiterte JVM-Parameter (für erfahrene Nutzer)</div>
+              </div>
+              <div class="st-row-ctrl">
+                <input class="st-input st-input-wide" type="text" value="-XX:+UseG1GC -XX:+ParallelRefProcEnabled">
+              </div>
+            </div>
+          </div>
+
+          <!-- GEFAHRENZONE -->
+          <div class="st-card" id="st-gefahrenzone">
+            <div class="st-card-head">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              <div>
+                <div class="st-card-title" style="color:var(--text-error)">Gefahrenzone</div>
+                <div class="st-card-sub">Irreversible Aktionen — bitte mit Bedacht verwenden</div>
+              </div>
+            </div>
+            <div class="st-danger-row">
+              <div class="st-row-info">
+                <div class="st-row-label" style="color:var(--text-error)">Welt zurücksetzen</div>
+                <div class="st-row-desc">Löscht alle Weltdaten unwiderruflich. Empfehlung: vorher Backup erstellen.</div>
+              </div>
+              <button class="btn btn-ghost" style="border-color:var(--text-error);color:var(--text-error);flex-shrink:0" onclick="toast('Sicherheitsabfrage: Welt zurücksetzen…')">
+                Welt löschen
+              </button>
+            </div>
+            <div class="st-danger-row">
+              <div class="st-row-info">
+                <div class="st-row-label" style="color:var(--text-error)">Server löschen</div>
+                <div class="st-row-desc">Entfernt diese Instanz vollständig aus CraftAdmin inkl. aller Daten.</div>
+              </div>
+              <button class="btn btn-ghost" style="border-color:var(--text-error);color:var(--text-error);flex-shrink:0" onclick="toast('Sicherheitsabfrage: Server löschen…')">
+                Instanz entfernen
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /st-sections -->
+
+        <!-- Section nav (TOC) -->
+        <div class="st-nav-wrap">
+          <div class="st-nav" id="st-nav">
+          <button class="st-nav-btn active" data-section="server" onclick="stSection('server',this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+            Server
+          </button>
+          <button class="st-nav-btn" data-section="gameplay" onclick="stSection('gameplay',this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/>
+              <circle cx="15" cy="12" r="1"/><circle cx="18" cy="10" r="1"/>
+              <path d="M17.92 12a5 5 0 1 1-5.92-4.9V4h2v3.1A5 5 0 0 1 17.92 12z"/>
+            </svg>
+            Gameplay
+          </button>
+          <button class="st-nav-btn" data-section="netzwerk" onclick="stSection('netzwerk',this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            Netzwerk
+          </button>
+          <button class="st-nav-btn" data-section="rcon" onclick="stSection('rcon',this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>
+            </svg>
+            RCON
+          </button>
+          <button class="st-nav-btn" data-section="ressourcen" onclick="stSection('ressourcen',this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+            Ressourcen
+          </button>
+          <div class="st-nav-sep"></div>
+          <button class="st-nav-btn" data-section="gefahrenzone" onclick="stSection('gefahrenzone',this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span style="color:var(--text-error)">Gefahrenzone</span>
+          </button>
+        </div><!-- /st-nav -->
+        </div><!-- /st-nav-wrap -->
+
+
+
+      </div><!-- /st-layout -->
+    </div><!-- /page-settings -->
+
   </div><!-- /content -->
 
 </main>
@@ -4152,6 +4707,7 @@ const PAGES = {
   'Backups':     'page-backups',
   'Logs':        'page-logs',
   'Uptime':      'page-uptime',
+  'Einstellungen': 'page-settings',
 };
 
 function nav(el, e) {
@@ -4163,7 +4719,7 @@ function nav(el, e) {
   const pageId = PAGES[label];
 
   // Hide all pages
-  document.querySelectorAll('.page-dashboard, .page-files, .page-console, .page-players, .page-perf, .page-worldmap, .page-backups, .page-logs, .page-uptime').forEach(p => p.classList.remove('active-page'));
+  document.querySelectorAll('.page-dashboard, .page-files, .page-console, .page-players, .page-perf, .page-worldmap, .page-backups, .page-logs, .page-uptime, .page-settings').forEach(p => p.classList.remove('active-page'));
 
   if (pageId) {
     document.getElementById(pageId).classList.add('active-page');
@@ -4175,6 +4731,7 @@ function nav(el, e) {
     if (pageId === 'page-backups')  bkInit();
     if (pageId === 'page-logs')     lgInit();
     if (pageId === 'page-uptime')   upInit();
+    if (pageId === 'page-settings') stInit();
   } else {
     document.getElementById('page-dashboard').classList.add('active-page');
     toast('Seite: ' + label + ' (noch nicht implementiert)');
@@ -6445,6 +7002,88 @@ function upSetRange(days, btn) {
   btn.classList.add('active');
   upRenderChart();
 }
+
+
+// ── SETTINGS PAGE ─────────────────────────────────────────────────────────
+
+/** @type {Function|null} */
+let stScrollHandler = null;
+
+/** Initialise the settings page — set up scroll spy. */
+function stInit() {
+  // Teardown previous handler
+  const scrollEl = document.querySelector('.page-settings.active-page');
+  if (!scrollEl) return;
+
+  if (stScrollHandler) scrollEl.removeEventListener('scroll', stScrollHandler);
+
+  const sections = ['server','gameplay','netzwerk','rcon','ressourcen','gefahrenzone'];
+
+  stScrollHandler = () => {
+    const containerTop = scrollEl.getBoundingClientRect().top;
+    const midpoint = containerTop + scrollEl.clientHeight * 0.35;
+
+    // Pick the last section whose top is above the midpoint of the visible area
+    let active = sections[0];
+    for (const id of sections) {
+      const el = document.getElementById('st-' + id);
+      if (!el) continue;
+      if (el.getBoundingClientRect().top <= midpoint) {
+        active = id;
+      }
+    }
+    stSetActive(active);
+  };
+
+  scrollEl.addEventListener('scroll', stScrollHandler, { passive: true });
+  // Run once immediately to set initial state
+  stScrollHandler();
+}
+
+/**
+ * Highlight a TOC button without scrolling.
+ * @param {string} id
+ */
+function stSetActive(id) {
+  document.querySelectorAll('.st-nav-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`.st-nav-btn[data-section="${id}"]`);
+  if (btn) btn.classList.add('active');
+}
+
+/**
+ * Scroll to a settings section and highlight the nav button.
+ * @param {string} id
+ * @param {HTMLElement} btn
+ */
+function stSection(id, btn) {
+  stSetActive(id);
+  const el = document.getElementById('st-' + id);
+  const scrollEl = document.querySelector('.page-settings.active-page');
+  if (el && scrollEl) {
+    const containerTop = scrollEl.getBoundingClientRect().top;
+    const elTop = el.getBoundingClientRect().top;
+    scrollEl.scrollBy({ top: elTop - containerTop - 18, behavior: 'smooth' });
+  }
+}
+
+/**
+ * Enable/disable RCON sub-fields based on toggle state.
+ * @param {HTMLInputElement} cb
+ */
+function stToggleRcon(cb) {
+  const opacity = cb.checked ? '1' : '0.4';
+  const events  = cb.checked ? '' : 'none';
+  ['st-rcon-port-row', 'st-rcon-pw-row'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.style.opacity = opacity; el.style.pointerEvents = events; }
+  });
+}
+
+/** Save settings (mock). */
+function stSave() { toast('Einstellungen gespeichert'); }
+
+/** Reset settings (mock). */
+function stReset() { toast('Einstellungen zurückgesetzt'); }
 
 </script>
 </body>
