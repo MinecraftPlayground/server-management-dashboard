@@ -4694,7 +4694,12 @@ function setTheme(t, btn) {
 
 function toggleSidebar() {
   document.body.classList.toggle('sidebar-collapsed');
+  // Resize map canvas after sidebar CSS transition finishes (~250ms)
+  setTimeout(() => {
+    if (typeof mapResize === 'function') mapResize();
+  }, 260);
 }
+
 
 // ── PAGE ROUTING ───────────────────────────────────────
 const PAGES = {
@@ -5792,6 +5797,12 @@ function mapInit() {
 
   mapResize();
   window.addEventListener('resize', mapResize);
+
+  // Observe the map card container so canvas resizes during sidebar transitions
+  if (mapResizeObserver) mapResizeObserver.disconnect();
+  mapResizeObserver = new ResizeObserver(() => mapResize());
+  mapResizeObserver.observe(mapVP);
+
   mapState.offsetX = 0;
   mapState.offsetZ = 0;
 
@@ -5817,6 +5828,9 @@ function mapResize() {
   mapCanvas.height = mapVP.clientHeight;
   mapRender();
 }
+
+/** @type {ResizeObserver|null} */
+let mapResizeObserver = null;
 
 function mapRender() {
   if (!mapCtx || !mapCanvas) return;
