@@ -3611,12 +3611,6 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
           </svg>
           <input type="text" id="lg-search-input" placeholder="Suchen… (Regex mit /pattern/)" oninput="lgSearch(this.value)">
         </div>
-
-        <!-- Level filter buttons -->
-        <button class="lg-level-btn lf-ok"   id="lg-f-ok"   onclick="lgToggleLevel('ok',this)"  >OK</button>
-        <button class="lg-level-btn lf-info"  id="lg-f-info" onclick="lgToggleLevel('info',this)">INFO</button>
-        <button class="lg-level-btn lf-warn"  id="lg-f-warn" onclick="lgToggleLevel('warn',this)">WARN</button>
-        <button class="lg-level-btn lf-error" id="lg-f-err"  onclick="lgToggleLevel('err',this)" >ERROR</button>
       </div>
 
       <!-- Log card -->
@@ -3656,35 +3650,18 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
               </div>
             </div>
           </div>
-          <span class="lg-line-count" id="lg-line-count">4 218 Zeilen</span>
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+            <button class="lg-level-btn lf-ok"   id="lg-f-ok"   onclick="lgToggleLevel('ok',this)"  >OK</button>
+            <button class="lg-level-btn lf-info"  id="lg-f-info" onclick="lgToggleLevel('info',this)">INFO</button>
+            <button class="lg-level-btn lf-warn"  id="lg-f-warn" onclick="lgToggleLevel('warn',this)">WARN</button>
+            <button class="lg-level-btn lf-error" id="lg-f-err"  onclick="lgToggleLevel('err',this)" >ERROR</button>
+            <span class="lg-toolbar-sep"></span>
+            <span class="lg-line-count" id="lg-line-count">4 218 Zeilen</span>
+          </div>
         </div>
 
         <!-- Output -->
         <div class="lg-output" id="lg-output"></div>
-
-        <!-- Status bar -->
-        <div class="lg-statusbar">
-          <div class="lg-sb-chip">
-            <span class="dot dot-on"></span>
-            <span id="lg-sb-file">latest.log</span>
-          </div>
-          <div class="lg-sb-sep"></div>
-          <div class="lg-sb-chip">
-            <span style="color:var(--text-online)" id="lg-sb-ok">4 168 OK</span>
-          </div>
-          <div class="lg-sb-chip">
-            <span style="color:var(--text-warn)" id="lg-sb-warn">47 WARN</span>
-          </div>
-          <div class="lg-sb-chip">
-            <span style="color:var(--text-error)" id="lg-sb-err">3 ERROR</span>
-          </div>
-          <div class="lg-sb-sp"></div>
-          <div class="lg-sb-chip" id="lg-sb-match" style="display:none">
-            <span style="color:#6e9fd0" id="lg-sb-match-text"></span>
-          </div>
-          <div class="lg-sb-sep"></div>
-          <span id="lg-sb-visible">Zeige 4 218 von 4 218</span>
-        </div>
 
       </div>
 
