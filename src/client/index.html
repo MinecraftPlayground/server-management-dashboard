@@ -697,6 +697,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
   display: flex; gap: 9px; align-items: baseline;
   padding: 1px 0; border-bottom: 1px solid transparent;
 }
+.con-line.nowrap .cl-msg { white-space: pre; word-break: normal; overflow-x: auto; }
 .con-line:hover { background: var(--bg-hover); margin: 0 -14px; padding: 1px 14px; }
 .con-line.hidden { display: none; }
 .cl-thread { color: var(--text-muted); flex-shrink: 0; font-size: 10px; }
@@ -1765,7 +1766,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
 
 /* Main layout: list + detail */
 .bk-body {
-  display: grid; grid-template-columns: 1fr 300px;
+  display: grid; grid-template-columns: 1fr 280px;
   gap: 11px; flex: 1; min-height: 0; min-width: 0;
 }
 
@@ -3025,7 +3026,13 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
               <button class="con-filter-btn on-f"   onclick="conFilter(this,'ok')"  ><span id="cnt-ok"  >0</span> OK</button>
               <button class="con-filter-btn info-f" onclick="conFilter(this,'info')"><span id="cnt-info">0</span> INFO</button>
               <button class="con-filter-btn warn-f" onclick="conFilter(this,'warn')"><span id="cnt-warn">0</span> WARN</button>
-              <button class="con-filter-btn err-f"  onclick="conFilter(this,'err')" ><span id="cnt-err" >0</span> ERR</button>
+              <button class="con-filter-btn err-f"  onclick="conFilter(this,'err')" ><span id="cnt-err" >0</span> ERROR</button>
+              <span class="lg-toolbar-sep" style="margin:0 2px"></span>
+              <button class="lg-toggle-btn" id="con-wrap-btn" onclick="conToggleWrap()" title="Zeilenumbruch">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/>
+                </svg>
+              </button>
             </div>
           </div>
 
@@ -3546,55 +3553,6 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
         </div>
       </div>
 
-      <!-- Stat tiles -->
-      <div class="lg-stat-row">
-        <div class="stat-tile">
-          <div class="stat-label">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-              <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
-            </svg>
-            Zeilen heute
-          </div>
-          <div class="stat-value" id="lg-sv-lines">4 218</div>
-          <div class="stat-sub">latest.log</div>
-        </div>
-        <div class="stat-tile">
-          <div class="stat-label">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-            Warnungen
-          </div>
-          <div class="stat-value warn" id="lg-sv-warn">47</div>
-          <div class="stat-sub">Heute</div>
-        </div>
-        <div class="stat-tile">
-          <div class="stat-label">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-            </svg>
-            Fehler
-          </div>
-          <div class="stat-value" style="color:var(--text-error)" id="lg-sv-err">3</div>
-          <div class="stat-sub">Heute</div>
-        </div>
-        <div class="stat-tile">
-          <div class="stat-label">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-            </svg>
-            Dateigröße
-          </div>
-          <div class="stat-value" id="lg-sv-size">2.4 <span style="font-size:13px;font-weight:400;color:var(--text-muted)">MB</span></div>
-          <div class="stat-sub">latest.log</div>
-        </div>
-      </div>
-
       <!-- Toolbar: search + level filters (über der Karte) -->
       <div class="lg-toolbar">
         <div class="lg-search">
@@ -3643,12 +3601,16 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-            <button class="lg-level-btn lf-ok"   id="lg-f-ok"   onclick="lgToggleLevel('ok',this)"  >OK</button>
-            <button class="lg-level-btn lf-info"  id="lg-f-info" onclick="lgToggleLevel('info',this)">INFO</button>
-            <button class="lg-level-btn lf-warn"  id="lg-f-warn" onclick="lgToggleLevel('warn',this)">WARN</button>
-            <button class="lg-level-btn lf-error" id="lg-f-err"  onclick="lgToggleLevel('err',this)" >ERROR</button>
+            <button class="lg-level-btn lf-ok"   id="lg-f-ok"   onclick="lgToggleLevel('ok',this)"  ><span id="lg-cnt-ok"  >0</span> OK</button>
+            <button class="lg-level-btn lf-info"  id="lg-f-info" onclick="lgToggleLevel('info',this)"><span id="lg-cnt-info">0</span> INFO</button>
+            <button class="lg-level-btn lf-warn"  id="lg-f-warn" onclick="lgToggleLevel('warn',this)"><span id="lg-cnt-warn">0</span> WARN</button>
+            <button class="lg-level-btn lf-error" id="lg-f-err"  onclick="lgToggleLevel('err',this)" ><span id="lg-cnt-err" >0</span> ERROR</button>
             <span class="lg-toolbar-sep"></span>
-            <span class="lg-line-count" id="lg-line-count">4 218 Zeilen</span>
+            <button class="lg-toggle-btn" id="lg-wrap-btn" onclick="lgToggleWrap()" title="Zeilenumbruch">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/>
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -6707,17 +6669,27 @@ function lgRender() {
   const html = lines.map((l, i) => {
     const meta = lgLevelMeta(l.lv);
     const levelVisible = lgActiveLevels.has(l.lv);
-    let msgHtml = lgHighlight(l.msg);
 
     let searchHidden = false;
+    let rawMsg = l.msg;
+
     if (regex) {
       if (regex.test(l.msg) || regex.test(l.ts) || regex.test(l.thr)) {
-        msgHtml = msgHtml.replace(regex, m => `<mark style="background:rgba(184,157,85,0.3);color:var(--text-primary)">${m}</mark>`);
+        // Mark matches in the raw text with a placeholder BEFORE html-escaping
+        rawMsg = rawMsg.replace(regex, m => `\x00MARK\x00${m}\x00ENDMARK\x00`);
         matches++;
       } else {
         searchHidden = true;
       }
     }
+
+    // Now highlight (escapes HTML, applies syntax colours)
+    let msgHtml = lgHighlight(rawMsg);
+
+    // Replace placeholders with actual <mark> tags (safe — placeholders survived escaping)
+    msgHtml = msgHtml
+      .replace(/\x00MARK\x00/g, '<mark style="background:rgba(184,157,85,0.3);color:var(--text-primary)">')
+      .replace(/\x00ENDMARK\x00/g, '</mark>');
 
     const hidden = !levelVisible || searchHidden;
     if (!hidden) visible++;
@@ -6744,6 +6716,11 @@ function lgRender() {
 
   const elCount = document.getElementById('lg-line-count');
   if (elCount) elCount.textContent = `${total.toLocaleString('de')} Zeilen`;
+
+  const cntOk   = document.getElementById('lg-cnt-ok');   if (cntOk)   cntOk.textContent   = okCnt;
+  const cntInfo = document.getElementById('lg-cnt-info');  if (cntInfo) cntInfo.textContent  = lines.filter(l=>l.lv==='info').length;
+  const cntWarn = document.getElementById('lg-cnt-warn');  if (cntWarn) cntWarn.textContent  = warnCnt;
+  const cntErr  = document.getElementById('lg-cnt-err');   if (cntErr)  cntErr.textContent   = errCnt;
 
   const elVisible = document.getElementById('lg-sb-visible');
   if (elVisible) elVisible.textContent = `Zeige ${visible.toLocaleString('de')} von ${total.toLocaleString('de')}`;
@@ -6824,6 +6801,13 @@ function lgToggleWrap() {
   const btn = document.getElementById('lg-wrap-btn');
   if (btn) btn.classList.toggle('on', lgWrap);
   lgRender();
+}
+
+/** Toggle line wrap on the console output. */
+function conToggleWrap() {
+  const btn = document.getElementById('con-wrap-btn');
+  const on  = btn ? btn.classList.toggle('on') : false;
+  document.querySelectorAll('.con-line').forEach(l => l.classList.toggle('nowrap', !on));
 }
 
 /** Toggle line numbers */
