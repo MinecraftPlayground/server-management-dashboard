@@ -1,0 +1,26 @@
+@font-face {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 300;
+  src:
+    local('Sora'),
+    url('./sora.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 300;
+  src:
+    local('JetBrains Mono'),
+    url('./jet_brains_mono.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: italic;
+  font-weight: 300;
+  src:
+    local('JetBrains Mono'),
+    url('./jet_brains_mono_italic.ttf') format('truetype');
+}

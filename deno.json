@@ -3,27 +3,27 @@
   "tasks": {
     "clear:dist": "rm -rf ./dist/*",
     "clear:reports": "rm -rf ./reports/*",
-    "copy:static": "mkdir -p ./dist/static/ ; cp -r ./src/client/static/* ./dist/static/",
-    "clear:dist-copy:static": "deno task clear:dist ; deno task copy:static",
+    "copy:assets": "mkdir -p ./dist/static/ ; cp -r ./src/client/static/* ./dist/static/ ; cp ./src/client/font/*.ttf ./dist/",
+    "clear:dist-copy:assets": "deno task clear:dist ; deno task copy:assets",
     "build": {
       "description": "Build the app for production.",
-      "command": "deno bundle --minify --platform=browser --outdir=./dist/ ./src/client/index.html",
-      "dependencies": [ "clear:dist-copy:static" ]
+      "command": "deno bundle --minify --platform=browser --external=*.ttf --outdir=./dist/ ./src/client/index.html",
+      "dependencies": [ "clear:dist-copy:assets" ]
     },
     "build:watch": {
       "description": "Build the app for production with watcher.",
-      "command": "deno bundle --watch --minify --platform=browser --outdir=./dist/ ./src/client/index.html",
-      "dependencies": [ "clear:dist-copy:static" ]
+      "command": "deno bundle --watch --minify --platform=browser --external=*.ttf --outdir=./dist/ ./src/client/index.html",
+      "dependencies": [ "clear:dist-copy:assets" ]
     },
     "build:development": {
       "description": "Build the app for development.",
-      "command": "deno bundle --keep-names --sourcemap --platform=browser --outdir=./dist/ ./src/client/index.html",
-      "dependencies": [ "clear:dist-copy:static" ]
+      "command": "deno bundle --keep-names --sourcemap --platform=browser --external=*.ttf --outdir=./dist/ ./src/client/index.html",
+      "dependencies": [ "clear:dist-copy:assets" ]
     },
     "build:development:watch": {
       "description": "Build the app for development with watcher.",
-      "command": "deno bundle --watch --keep-names --sourcemap --platform=browser --outdir=./dist/ ./src/client/index.html",
-      "dependencies": [ "clear:dist-copy:static" ]
+      "command": "deno bundle --watch --keep-names --sourcemap --platform=browser --external=*.ttf --outdir=./dist/ ./src/client/index.html",
+      "dependencies": [ "clear:dist-copy:assets" ]
     },
     "serve": {
       "description": "Run the server (default on port 8000) for production.",
