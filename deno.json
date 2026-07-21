@@ -7,22 +7,22 @@
     "clear:dist-copy:assets": "deno task clear:dist ; deno task copy:assets",
     "build": {
       "description": "Build the app for production.",
-      "command": "deno bundle --minify --platform=browser --external=*.ttf --outdir=./dist/ ./src/client/index.html",
+      "command": "deno bundle --minify --platform=browser --external=*.ttf --outdir=./dist/ ./src/client/routes/index.html",
       "dependencies": [ "clear:dist-copy:assets" ]
     },
     "build:watch": {
       "description": "Build the app for production with watcher.",
-      "command": "deno bundle --watch --minify --platform=browser --external=*.ttf --outdir=./dist/ ./src/client/index.html",
+      "command": "deno bundle --watch --minify --platform=browser --external=*.ttf --outdir=./dist/ ./src/client/routes/index.html",
       "dependencies": [ "clear:dist-copy:assets" ]
     },
     "build:development": {
       "description": "Build the app for development.",
-      "command": "deno bundle --keep-names --sourcemap --platform=browser --external=*.ttf --outdir=./dist/ ./src/client/index.html",
+      "command": "deno bundle --keep-names --sourcemap --platform=browser --external=*.ttf --outdir=./dist/ ./src/client/routes/index.html",
       "dependencies": [ "clear:dist-copy:assets" ]
     },
     "build:development:watch": {
       "description": "Build the app for development with watcher.",
-      "command": "deno bundle --watch --keep-names --sourcemap --platform=browser --external=*.ttf --outdir=./dist/ ./src/client/index.html",
+      "command": "deno bundle --watch --keep-names --sourcemap --platform=browser --external=*.ttf --outdir=./dist/ ./src/client/routes/index.html",
       "dependencies": [ "clear:dist-copy:assets" ]
     },
     "serve": {
@@ -120,6 +120,7 @@
     }
   },
   "imports": {
+    "$/": "./src/client/",
     "@std/cli": "jsr:@std/cli@^1.0.6",
     "@std/fs": "jsr:@std/fs@^1.0.20",
     "@std/http": "jsr:@std/http@^1.0.22",
