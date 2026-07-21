@@ -3,7 +3,7 @@
 @import '../styles/structures.css';
 
 
-*,
+*:not([shadow-root]),
 *::before,
 *::after {
   margin: 0;
@@ -24,7 +24,7 @@ body {
   
   grid-template-rows: 50px auto 50px;
   grid-template-columns: 250px auto;
-  background-color: var(--color-container-background);
+  /* background-color: var(--color-container-background); */
 
   & > .container-status,
   & > .container-sidebar,

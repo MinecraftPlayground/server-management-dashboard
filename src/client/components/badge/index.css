@@ -1,0 +1,42 @@
+:host {
+  display: inline-block;
+  padding: 3px 8px;
+  border: 1px solid;
+  border-radius: var(--radius-small);
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 700;
+  font-width: 5px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: .05em;
+}
+
+:host([type="debug"]) {
+  color: var(--color-debug);
+  background-color: var(--color-debug-dim);
+  border-color: var(--color-debug-border);
+}
+
+:host([type="info"]) {
+  color: var(--color-info);
+  background-color: var(--color-info-dim);
+  border-color: var(--color-info-border);
+}
+
+:host([type="success"]) {
+  color: var(--color-ok);
+  background-color: var(--color-ok-dim);
+  border-color: var(--color-ok-border);
+}
+
+:host([type="warning"]) {
+  color: var(--color-warn);
+  background-color: var(--color-warn-dim);
+  border-color: var(--color-warn-border);
+}
+
+:host([type="error"]) {
+  color: var(--color-error);
+  background-color: var(--color-error-dim);
+  border-color: var(--color-error-border);
+}
