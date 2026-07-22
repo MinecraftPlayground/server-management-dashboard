@@ -1,3 +1,3 @@
 import './index.css'
 
-import '$/components/badge/index.ts'
+import '../components/badge/index.ts'

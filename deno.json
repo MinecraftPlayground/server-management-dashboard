@@ -120,7 +120,6 @@
     }
   },
   "imports": {
-    "$/": "./src/client/",
     "@std/cli": "jsr:@std/cli@^1.0.6",
     "@std/fs": "jsr:@std/fs@^1.0.20",
     "@std/http": "jsr:@std/http@^1.0.22",
