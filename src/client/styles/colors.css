@@ -16,6 +16,11 @@
   --color-text-primary: #d4dae6;
   --color-text-secondary: #7e8fa8;
   --color-text-muted: #404d60;
+  --color-text-debug: #5a6478;
+  --color-text-info: #6e9fd0;
+  --color-text-ok: #6db990;
+  --color-text-warn: #b89d55;
+  --color-text-error: #b86060;
 
   /* Accent */
   --color-accent: #4a8f6a;
@@ -23,12 +28,12 @@
   --color-accent-glow: rgb(from var(--color-accent-base) r g b / 0.12);
 
   /* Semantic */
+  --color-path: #9a7ec8;
+  --color-debug: #5a6478;
+  --color-info: #6e9fd0;
   --color-ok: #6db990;
   --color-warn: #b89d55;
   --color-error: #b86060;
-  --color-debug: #5a6478;
-  --color-info: #6e9fd0;
-  --color-path: #9a7ec8;
 
   --color-ok-dim: rgb(from var(--color-ok) r g b / 0.12);
   --color-warn-dim: rgb(from var(--color-warn)  r g b / 0.12);
@@ -64,6 +69,11 @@
     --color-text-primary: #1a2032;
     --color-text-secondary: #5a6a82;
     --color-text-muted: #a0aab8;
+    --color-text-debug: #8090a8;
+    --color-text-info: #2a6090;
+    --color-text-ok: #2a6e40;
+    --color-text-warn: #8a6820;
+    --color-text-error: #8a3030;
 
     /* Accent */
     --color-accent: #2e7a50;
@@ -71,12 +81,12 @@
     --color-accent-glow: rgb(from var(--color-accent) r g b / 0.08);
 
     /* Semantic */
+    --color-path: #6a4fa8;
+    --color-debug: #8090a8;
+    --color-info: #2a6090;
     --color-ok: #2a6e40;
     --color-warn: #8a6820;
     --color-error: #8a3030;
-    --color-debug: #8090a8;
-    --color-info: #2a6090;
-    --color-path: #6a4fa8;
 
     --color-ok-dim: rgb(from var(--color-ok) r g b / 0.10);
     --color-warn-dim: rgb(from var(--color-warn) r g b / 0.10);

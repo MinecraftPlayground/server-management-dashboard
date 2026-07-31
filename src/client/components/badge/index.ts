@@ -10,10 +10,16 @@ import style from './index.css' with {type: 'css'};
 export class Badge extends CustomElement {
   static override styles = style
 
-  @property({ attribute: 'type' })
+  @property({ attribute: 'type', reflect: true })
   accessor badgeType : BadgeType = badgeType.INFO;
 
   override render() : TemplateResult {
     return html`<slot></slot>`;
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'badge-' : Badge;
   }
 }

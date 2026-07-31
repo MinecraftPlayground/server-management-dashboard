@@ -1,3 +1,4 @@
 import './index.css'
 
-import '../components/badge/index.ts'
+import '../components/index.ts'
+import '../sections/index.ts'

@@ -3,7 +3,7 @@
   "tasks": {
     "clear:dist": "rm -rf ./dist/*",
     "clear:reports": "rm -rf ./reports/*",
-    "copy:assets": "mkdir -p ./dist/static/ ; cp -r ./src/client/static/* ./dist/static/ ; cp ./src/client/font/*.ttf ./dist/",
+    "copy:assets": "mkdir -p ./dist/static/ ./dist/icons/ ; cp -r ./src/client/static/* ./dist/static/ ; cp ./src/client/font/*.ttf ./dist/ ; cp ./src/client/icons/* ./dist/icons/",
     "clear:dist-copy:assets": "deno task clear:dist ; deno task copy:assets",
     "build": {
       "description": "Build the app for production.",
@@ -126,6 +126,9 @@
     "@std/fmt": "jsr:@std/fmt@^1.0.2",
     "@std/path": "jsr:@std/path@^1.1.3",
     "@lit": "npm:lit@^3.3.3",
-    "@lit/decorators": "npm:lit@^3.3.3/decorators.js"
+    "@lit/task": "npm:@lit/task@^1.0.3",
+    "@lit/decorators": "npm:lit@^3.3.3/decorators.js",
+    "@lit/directives/unsafe-svg": "npm:lit@^3.3.3/directives/unsafe-svg.js",
+    "@lit/directives/until": "npm:lit@^3.3.3/directives/until.js"
   }
 }

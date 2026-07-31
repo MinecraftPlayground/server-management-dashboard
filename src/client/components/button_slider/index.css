@@ -1,0 +1,35 @@
+:host {
+  display: inline-flex;
+  border-radius: var(--radius-medium);
+}
+
+:host(:focus-visible) {
+  outline: 2px solid var(--color-border-focus);
+}
+
+.track {
+  position: relative;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+
+  background-color: var(--color-debug-dim);
+  border: 1px solid var(--color-debug-border);
+  border-radius: var(--radius-medium);
+}
+
+.thumb {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 0;
+
+  border-radius: var(--radius-small);
+  background-color: var(--color-background-active);
+
+  transition:
+    transform var(--transition-delay),
+    width var(--transition-delay);
+  will-change: transform, width;
+  pointer-events: none;
+}

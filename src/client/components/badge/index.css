@@ -1,42 +1,41 @@
 :host {
-  display: inline-block;
+  display: inline-flex;
   padding: 3px 8px;
   border: 1px solid;
   border-radius: var(--radius-small);
   text-transform: uppercase;
   font-size: 10px;
   font-weight: 700;
-  font-width: 5px;
   font-family: 'JetBrains Mono', monospace;
   letter-spacing: .05em;
 }
 
 :host([type="debug"]) {
-  color: var(--color-debug);
+  color: var(--color-text-debug);
   background-color: var(--color-debug-dim);
   border-color: var(--color-debug-border);
 }
 
 :host([type="info"]) {
-  color: var(--color-info);
+  color: var(--color-text-info);
   background-color: var(--color-info-dim);
   border-color: var(--color-info-border);
 }
 
 :host([type="success"]) {
-  color: var(--color-ok);
+  color: var(--color-text-ok);
   background-color: var(--color-ok-dim);
   border-color: var(--color-ok-border);
 }
 
 :host([type="warning"]) {
-  color: var(--color-warn);
+  color: var(--color-text-warn);
   background-color: var(--color-warn-dim);
   border-color: var(--color-warn-border);
 }
 
 :host([type="error"]) {
-  color: var(--color-error);
+  color: var(--color-text-error);
   background-color: var(--color-error-dim);
   border-color: var(--color-error-border);
 }
