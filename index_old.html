@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CraftAdmin — Minecraft Dashboard</title>
+<title>CraftAdmin - Minecraft Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -89,7 +89,7 @@ body.sidebar-collapsed .sidebar .nav-text,
 body.sidebar-collapsed .sidebar .nav-badge,
 body.sidebar-collapsed .sidebar .sidebar-search { display: none; }
 
-/* Nav-group als Trennbalken — gleiche Höhe wie normal, Text unsichtbar */
+/* Nav-group als Trennbalken - gleiche Höhe wie normal, Text unsichtbar */
 body.sidebar-collapsed .sidebar .nav-group {
   padding: 10px 8px 4px;
   font-size: 0;
@@ -151,7 +151,7 @@ body.sidebar-collapsed .sidebar .sidebar-footer { padding: 6px 8px; }
   grid-area: footer;
 }
 
-/* Toggle button — styled as normal nav-link */
+/* Toggle button - styled as normal nav-link */
 .sidebar-toggle-btn {
   display: flex; align-items: center; gap: 9px;
   width: 100%; padding: 7px 8px; border-radius: var(--r-md);
@@ -618,12 +618,12 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
   margin-bottom: 14px; flex-shrink: 0;
 }
 
-/* Main console layout — full width, fills remaining height */
+/* Main console layout - full width, fills remaining height */
 .con-layout {
   flex: 1; display: flex; flex-direction: column; min-height: 0;
 }
 
-/* Output area — fills all space between header and input */
+/* Output area - fills all space between header and input */
 .con-output-wrap {
   flex: 1; display: flex; flex-direction: column;
   background: var(--bg-card); border: 1px solid var(--border);
@@ -796,7 +796,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
   container-type: inline-size;
   container-name: pl-list;
 }
-/* Single grid spans header + all rows — no alignment drift possible */
+/* Single grid spans header + all rows - no alignment drift possible */
 .pl-list-scroll {
   flex: 1; overflow-y: auto; overflow-x: hidden;
   scrollbar-width: thin; scrollbar-color: var(--border) transparent;
@@ -833,7 +833,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
 .sort-col:hover .sort-arrow,
 .sort-col.sort-active .sort-arrow { opacity: 1; }
 
-/* Player row — display:contents so its children become direct grid items */
+/* Player row - display:contents so its children become direct grid items */
 .pl-row {
   display: contents;
   cursor: pointer;
@@ -880,7 +880,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
 .pl-ping-cell.bad  { color: var(--text-error); }
 .pl-act-cell { display: flex; gap: 4px; }
 
-/* Responsive columns via container queries — hide columns as card gets narrower */
+/* Responsive columns via container queries - hide columns as card gets narrower */
 @container pl-list (max-width: 519px) {
   .pl-list-scroll   { grid-template-columns: minmax(0, 1fr) 70px 80px 58px; }
   .pl-world-cell, .pl-list-head > span:nth-child(4) { display: none; }
@@ -1336,7 +1336,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
   display: flex; flex-direction: column; min-width: 0;
 }
 
-/* Dimension dropdown — floating inside viewport */
+/* Dimension dropdown - floating inside viewport */
 .map-dim-dropdown { position: absolute; top: 10px; left: 10px; z-index: 20; flex-shrink: 0; }
 .map-dim-btn {
   display: flex; align-items: center; gap: 6px;
@@ -1365,7 +1365,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
 .map-dim-option.active { color: var(--text-primary); background: var(--bg-active); }
 .map-dim-option svg { color: var(--text-muted); flex-shrink: 0; }
 
-/* Search — floating, right of dim dropdown — removed */
+/* Search - floating, right of dim dropdown - removed */
 .map-viewport {
   flex: 1; position: relative; overflow: hidden;
   background: #0a0e14; cursor: grab; min-height: 0;
@@ -2254,7 +2254,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
   display: flex; flex-direction: column; gap: 11px; min-width: 0;
 }
 
-/* Right: sticky TOC — sticks relative to the page scroll container */
+/* Right: sticky TOC - sticks relative to the page scroll container */
 .st-nav-wrap { position: sticky; top: 0; }
 .st-nav {
   display: flex; flex-direction: column; gap: 2px;
@@ -2439,7 +2439,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
   <div class="status-rail">
     <div class="schip" id="inst-status-chip">
       <div class="dot dot-on" id="inst-status-dot"></div>
-      <span id="inst-status-text">Survival World — Online</span>
+      <span id="inst-status-text">Survival World - Online</span>
     </div>
     <span class="version-tag" id="inst-version">MC 1.20.4</span>
   </div>
@@ -2733,7 +2733,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
           </svg>
-          Uptime — letzte 30 Tage
+          Uptime - letzte 30 Tage
         </div>
         <div style="display:flex;align-items:center;gap:10px">
           <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-online)">99.4%</span>
@@ -3020,7 +3020,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
 
       <div class="con-layout">
 
-        <!-- LOG OUTPUT — full width -->
+        <!-- LOG OUTPUT - full width -->
         <div class="con-output-wrap">
           <div class="con-output-head">
             <div class="con-output-title">
@@ -3256,11 +3256,11 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
         <!-- Map card -->
         <div class="map-card">
           <!-- Card header: dimension dropdown + layer + search -->
-          <!-- Viewport — full card height now -->
+          <!-- Viewport - full card height now -->
           <div class="map-viewport" id="map-viewport">
             <canvas id="map-canvas" class="map-canvas"></canvas>
 
-            <!-- Floating dimension dropdown — top left -->
+            <!-- Floating dimension dropdown - top left -->
             <div class="map-dim-dropdown map-float-dim" id="map-dim-wrap">
               <button class="map-dim-btn" onclick="mapToggleDim()" id="map-dim-btn">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
@@ -3283,7 +3283,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
               </div>
             </div>
 
-            <!-- Floating search — next to dimension dropdown -->
+            <!-- Floating search - next to dimension dropdown -->
 
             <div class="map-controls">
               <button class="map-ctrl-btn" onclick="mapZoom(1)" title="Reinzoomen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
@@ -3441,7 +3441,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
         </div>
         <div class="bk-schedule-info">
           <div class="bk-schedule-label">Automatischer Zeitplan aktiv</div>
-          <div class="bk-schedule-sub">Täglich um 03:00 · 11:00 Uhr — Aufbewahrung: 7 Tage · Nächstes Backup in 13h 04m</div>
+          <div class="bk-schedule-sub">Täglich um 03:00 · 11:00 Uhr - Aufbewahrung: 7 Tage · Nächstes Backup in 13h 04m</div>
         </div>
         <div class="bk-schedule-warn">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -3795,7 +3795,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
             </svg>
           </div>
           <div class="up-inc-info">
-            <div class="up-inc-title">Hohe Latenz — Server überlastet</div>
+            <div class="up-inc-title">Hohe Latenz - Server überlastet</div>
             <div class="up-inc-meta">
               <span>25.04.2025, 11:00–11:23 Uhr</span>
               <span>TPS: 8.2 → Erholt</span>
@@ -3813,7 +3813,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
             </svg>
           </div>
           <div class="up-inc-info">
-            <div class="up-inc-title">Server nicht erreichbar — OOM Crash</div>
+            <div class="up-inc-title">Server nicht erreichbar - OOM Crash</div>
             <div class="up-inc-meta">
               <span>19.04.2025, 03:14–03:41 Uhr</span>
               <span>java.lang.OutOfMemoryError: GC overhead limit exceeded</span>
@@ -3831,7 +3831,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
             </svg>
           </div>
           <div class="up-inc-info">
-            <div class="up-inc-title">Geplante Wartung — Update auf 1.20.4</div>
+            <div class="up-inc-title">Geplante Wartung - Update auf 1.20.4</div>
             <div class="up-inc-meta">
               <span>08.04.2025, 04:00–04:18 Uhr</span>
               <span>Manueller Neustart nach Plugin-Update</span>
@@ -3849,7 +3849,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
             </svg>
           </div>
           <div class="up-inc-info">
-            <div class="up-inc-title">Verbindungsabbrüche — Netzwerkproblem</div>
+            <div class="up-inc-title">Verbindungsabbrüche - Netzwerkproblem</div>
             <div class="up-inc-meta">
               <span>28.03.2025, 19:52–20:15 Uhr</span>
               <span>Paketloss 34% · ISP-seitig behoben</span>
@@ -4225,7 +4225,7 @@ body.sidebar-collapsed .sidebar-toggle-btn { justify-content: center; padding: 7
               </svg>
               <div>
                 <div class="st-card-title" style="color:var(--text-error)">Gefahrenzone</div>
-                <div class="st-card-sub">Irreversible Aktionen — bitte mit Bedacht verwenden</div>
+                <div class="st-card-sub">Irreversible Aktionen - bitte mit Bedacht verwenden</div>
               </div>
             </div>
             <div class="st-danger-row">
@@ -4422,11 +4422,11 @@ const INSTANCES = {
     addr: 'localhost:60004',
     status: 'off',
     players: 0, maxPlayers: 10,
-    ram: '—', maxRam: 4,
+    ram: '-', maxRam: 4,
     ramPct: 0,
-    tps: '—',
+    tps: '-',
     tpsGood: false,
-    uptime: '—',
+    uptime: '-',
     uptimeSub: 'Server gestoppt',
     version: 'MC 1.21-pre2',
     playerList: []
@@ -4444,7 +4444,7 @@ function applyInstance(name) {
   // Topbar
   const dotEl = document.getElementById('inst-status-dot');
   dotEl.className = 'dot ' + (d.status === 'on' ? 'dot-on' : d.status === 'warn' ? 'dot-warn' : 'dot-off');
-  document.getElementById('inst-status-text').textContent = name + ' — ' + (offline ? 'Offline' : d.status === 'warn' ? 'High Load' : 'Online');
+  document.getElementById('inst-status-text').textContent = name + ' - ' + (offline ? 'Offline' : d.status === 'warn' ? 'High Load' : 'Online');
   document.getElementById('inst-version').textContent = d.version;
 
   // Page head
@@ -4465,27 +4465,27 @@ function applyInstance(name) {
 
   // Players
   svPlayers.className = 'stat-value' + (offline ? ' muted' : ' good');
-  svPlayers.innerHTML = offline ? `<span style="font-size:13px;color:var(--text-muted);font-weight:400">—</span>` : `${d.players} <span style="font-size:13px;color:var(--text-muted);font-weight:400">/ ${d.maxPlayers}</span>`;
+  svPlayers.innerHTML = offline ? `<span style="font-size:13px;color:var(--text-muted);font-weight:400">-</span>` : `${d.players} <span style="font-size:13px;color:var(--text-muted);font-weight:400">/ ${d.maxPlayers}</span>`;
   spPlayers.style.width = offline ? '0' : Math.round(d.players / d.maxPlayers * 100) + '%';
   spPlayers.className = 'stat-pf';
-  ssPlayers.textContent = offline ? '—' : (d.maxPlayers - d.players) + ' Slots frei';
+  ssPlayers.textContent = offline ? '-' : (d.maxPlayers - d.players) + ' Slots frei';
 
   // RAM
   const ramCls = d.ramPct > 85 ? 'h' : d.ramPct > 65 ? 'w' : '';
   svRam.className = 'stat-value' + (offline ? ' muted' : d.ramPct > 85 ? ' warn' : '');
-  svRam.innerHTML = offline ? `<span style="font-size:13px;color:var(--text-muted);font-weight:400">—</span>` : `${d.ram} <span style="font-size:13px;color:var(--text-muted);font-weight:400">GB</span>`;
+  svRam.innerHTML = offline ? `<span style="font-size:13px;color:var(--text-muted);font-weight:400">-</span>` : `${d.ram} <span style="font-size:13px;color:var(--text-muted);font-weight:400">GB</span>`;
   spRam.style.width = offline ? '0' : d.ramPct + '%';
   spRam.className = 'stat-pf' + (ramCls ? ' ' + ramCls : '');
-  ssRam.textContent = offline ? '—' : 'von ' + d.maxRam + ' GB';
+  ssRam.textContent = offline ? '-' : 'von ' + d.maxRam + ' GB';
 
   // TPS
   svTps.className = 'stat-value' + (offline ? ' muted' : d.tpsGood ? ' good' : ' warn');
   svTps.textContent = d.tps;
-  ssTps.textContent = offline ? '—' : 'Ziel: 20.0';
+  ssTps.textContent = offline ? '-' : 'Ziel: 20.0';
 
   // Uptime
   svUptime.className = 'stat-value' + (offline ? ' muted' : '');
-  svUptime.innerHTML = offline ? `<span style="font-size:13px;color:var(--text-muted);font-weight:400">—</span>` : d.uptime;
+  svUptime.innerHTML = offline ? `<span style="font-size:13px;color:var(--text-muted);font-weight:400">-</span>` : d.uptime;
   ssUptime.textContent = d.uptimeSub;
 
   // Player table
@@ -4620,7 +4620,7 @@ document.addEventListener('click', e => {
   });
 })();
 
-// Init — erste Instanz laden
+// Init - erste Instanz laden
 applyInstance('Survival World');
 
 // Theme
@@ -4683,7 +4683,7 @@ function nav(el, e) {
 
 // ── CONSOLE PAGE ────────────────────────────────────────
 
-/** Active filter levels — all on by default. */
+/** Active filter levels - all on by default. */
 const conActiveFilters = new Set(['ok','info','warn','err']);
 
 /** Log counts per level. */
@@ -4728,7 +4728,7 @@ const CON_LOGS = {
     ['12:01:45','Server thread','warn','Chunk [12, -4] will be re-queued for saving'],
     ['12:14:00','Server thread','warn','Can\'t keep up! Running 890ms behind, skipping 17 tick(s)'],
     ['12:22:31','Server thread','info','Saving the game (this may take a moment!)'],
-    ['12:22:35','Server thread','err', 'AutoSave took 4301ms — this may cause lag'],
+    ['12:22:35','Server thread','err', 'AutoSave took 4301ms - this may cause lag'],
   ],
   'Vanilla Snapshot': [
     ['--:--:--','System','err','Server ist offline'],
@@ -4795,11 +4795,11 @@ function conSyncStats(inst) {
   const d = INSTANCES[inst];
   if (!d) return;
   const offline = d.status === 'off';
-  document.getElementById('cs-tps').textContent  = offline ? '—' : d.tps;
+  document.getElementById('cs-tps').textContent  = offline ? '-' : d.tps;
   document.getElementById('cs-tps').className    = 'csm-val' + (offline ? '' : d.tpsGood ? ' g' : ' w');
-  document.getElementById('cs-players').textContent = offline ? '—' : d.players + ' / ' + d.maxPlayers;
-  document.getElementById('cs-ram').textContent  = offline ? '—' : d.ram + ' GB';
-  document.getElementById('cs-uptime').textContent = offline ? '—' : d.uptime;
+  document.getElementById('cs-players').textContent = offline ? '-' : d.players + ' / ' + d.maxPlayers;
+  document.getElementById('cs-ram').textContent  = offline ? '-' : d.ram + ' GB';
+  document.getElementById('cs-uptime').textContent = offline ? '-' : d.uptime;
 }
 
 /**
@@ -4907,7 +4907,7 @@ function conSendBtn() {
       const names = d?.playerList.map(p => p[0]).join(', ') || '(niemand)';
       conAppend(t,'Server thread','info', `Es sind ${d?.players || 0} Spieler online: ${names}`);
     } else if (cmd.startsWith('tps')) {
-      conAppend(t,'Server thread','info', `TPS: ${d?.tps || '—'} (Ziel: 20.0) — MSPT: ${(20/parseFloat(d?.tps||20)*50).toFixed(1)}`);
+      conAppend(t,'Server thread','info', `TPS: ${d?.tps || '-'} (Ziel: 20.0) - MSPT: ${(20/parseFloat(d?.tps||20)*50).toFixed(1)}`);
     } else if (cmd.startsWith('save-all')) {
       conAppend(t,'Server thread','info', 'Saving the game (this may take a moment!)');
       setTimeout(() => conAppend(t,'Server thread','info','Saved the game'), 600);
@@ -5068,7 +5068,7 @@ function plUpdateStats(inst) {
   const ops    = data.online.filter(p => p.op).length;
   const banned = data.banned.length;
   const pings  = data.online.filter(p => p.ping).map(p => parseInt(p.ping));
-  const avgPing = pings.length ? Math.round(pings.reduce((a,b)=>a+b,0)/pings.length) + ' ms' : '—';
+  const avgPing = pings.length ? Math.round(pings.reduce((a,b)=>a+b,0)/pings.length) + ' ms' : '-';
 
   document.getElementById('pl-sv-online').textContent = online;
   document.getElementById('pl-sv-max').textContent    = `von ${maxPlayers} Slots`;
@@ -5123,9 +5123,9 @@ function plRender() {
         </div>
         <span class="pl-pname">${p.name}</span>${p.op ? '<span class="op-tag pl-name-tag">OP</span>' : ''}${p.banned ? '<span class="op-tag pl-name-tag" style="background:rgba(122,53,53,.15);color:var(--text-error);border-color:rgba(122,53,53,.28)">BAN</span>' : ''}
       </div>
-      <div class="pl-ping-cell ${pingClass}">${p.ping || '—'}</div>
-      <div class="pl-since-cell">${p.since || '—'}</div>
-      <div class="pl-world-cell">${p.world ? plWorldLabel(p.world) : '—'}</div>
+      <div class="pl-ping-cell ${pingClass}">${p.ping || '-'}</div>
+      <div class="pl-since-cell">${p.since || '-'}</div>
+      <div class="pl-world-cell">${p.world ? plWorldLabel(p.world) : '-'}</div>
       <div class="pl-act-cell">
         ${!p.banned ? `
         <button class="pact" title="Kick" onclick="event.stopPropagation();toast('Kick: ${p.name}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
@@ -5199,17 +5199,17 @@ function plShowDetail(p) {
       ${!p.banned ? `
       <div>
         <div class="pl-detail-section-label">Verbindung</div>
-        <div class="pl-kv"><span class="k">Ping</span><span class="v ${pingClass}">${p.ping || '—'}</span></div>
-        <div class="pl-kv"><span class="k">Online seit</span><span class="v">${p.since || '—'}</span></div>
-        <div class="pl-kv"><span class="k">Koordinaten</span><span class="v">${p.coords || '—'}</span></div>
-        <div class="pl-kv"><span class="k">Welt</span><span class="v">${p.world ? plWorldLabel(p.world) : '—'}</span></div>
+        <div class="pl-kv"><span class="k">Ping</span><span class="v ${pingClass}">${p.ping || '-'}</span></div>
+        <div class="pl-kv"><span class="k">Online seit</span><span class="v">${p.since || '-'}</span></div>
+        <div class="pl-kv"><span class="k">Koordinaten</span><span class="v">${p.coords || '-'}</span></div>
+        <div class="pl-kv"><span class="k">Welt</span><span class="v">${p.world ? plWorldLabel(p.world) : '-'}</span></div>
       </div>
       <div class="pl-divider"></div>
       <div>
         <div class="pl-detail-section-label">Status</div>
-        <div class="pl-kv"><span class="k">Spielmodus</span><span class="v">${p.gamemode ? p.gamemode.charAt(0).toUpperCase()+p.gamemode.slice(1) : '—'}</span></div>
-        <div class="pl-kv"><span class="k">Leben</span><span class="v ${p.health <= 6 ? 'warn' : 'good'}">${p.health !== null ? p.health + ' / 20' : '—'}</span></div>
-        <div class="pl-kv"><span class="k">Hunger</span><span class="v ${p.food <= 6 ? 'warn' : ''}">${p.food !== null ? p.food + ' / 20' : '—'}</span></div>
+        <div class="pl-kv"><span class="k">Spielmodus</span><span class="v">${p.gamemode ? p.gamemode.charAt(0).toUpperCase()+p.gamemode.slice(1) : '-'}</span></div>
+        <div class="pl-kv"><span class="k">Leben</span><span class="v ${p.health <= 6 ? 'warn' : 'good'}">${p.health !== null ? p.health + ' / 20' : '-'}</span></div>
+        <div class="pl-kv"><span class="k">Hunger</span><span class="v ${p.food <= 6 ? 'warn' : ''}">${p.food !== null ? p.food + ' / 20' : '-'}</span></div>
       </div>
       <div class="pl-divider"></div>
       <div>
@@ -5220,8 +5220,8 @@ function plShowDetail(p) {
       ` : `
       <div>
         <div class="pl-detail-section-label">Ban-Informationen</div>
-        <div class="pl-kv"><span class="k">Grund</span><span class="v warn">${p.banReason || '—'}</span></div>
-        <div class="pl-kv"><span class="k">Datum</span><span class="v">${p.banDate || '—'}</span></div>
+        <div class="pl-kv"><span class="k">Grund</span><span class="v warn">${p.banReason || '-'}</span></div>
+        <div class="pl-kv"><span class="k">Datum</span><span class="v">${p.banDate || '-'}</span></div>
         <div class="pl-kv"><span class="k">Gebannt von</span><span class="v">Server</span></div>
         <div class="pl-kv"><span class="k">Läuft ab</span><span class="v">Nie</span></div>
       </div>
@@ -5410,9 +5410,9 @@ function fbRender(filter = '') {
         </svg>
         <span style="color:var(--text-muted);">..</span>
       </div>
-      <div class="fb-size">—</div>
-      <div class="fb-date">—</div>
-      <div class="fb-perms">—</div>
+      <div class="fb-size">-</div>
+      <div class="fb-date">-</div>
+      <div class="fb-perms">-</div>
     </div>` : '';
 
   list.innerHTML = parentRow + sorted.map((item, i) => `
@@ -5420,9 +5420,9 @@ function fbRender(filter = '') {
          onclick="fbSelect(${i},'${filter}')"
          ondblclick="fbOpen(${i},'${filter}')">
       <div class="fb-name">${fbIcon(item.type)}<span>${item.name}</span></div>
-      <div class="fb-size">${item.type === 'dir' ? '—' : (item.size || '—')}</div>
-      <div class="fb-date">${item.modified || '—'}</div>
-      <div class="fb-perms">${item.perms || '—'}</div>
+      <div class="fb-size">${item.type === 'dir' ? '-' : (item.size || '-')}</div>
+      <div class="fb-date">${item.modified || '-'}</div>
+      <div class="fb-perms">${item.perms || '-'}</div>
     </div>
   `).join('');
 
@@ -5465,9 +5465,9 @@ function fbModalOpen() {
   const meta = document.getElementById('fb-modal-meta');
   meta.innerHTML = `
     <span><b>Typ</b>${item.type.toUpperCase()}</span>
-    <span><b>Größe</b>${item.size || '—'}</span>
-    <span><b>Geändert</b>${item.modified || '—'}</span>
-    <span><b>Rechte</b>${item.perms || '—'}</span>`;
+    <span><b>Größe</b>${item.size || '-'}</span>
+    <span><b>Geändert</b>${item.modified || '-'}</span>
+    <span><b>Rechte</b>${item.perms || '-'}</span>`;
 
   document.getElementById('fb-modal-edit-btn').style.display = '';
   document.getElementById('fb-modal-body').innerHTML =
@@ -5547,8 +5547,8 @@ function fbShowPreview(item) {
           <div class="fb-dir-stat"><span class="dk">Ordner</span><span class="dv">${dirs}</span></div>
           <div class="fb-dir-stat"><span class="dk">Dateien</span><span class="dv">${files}</span></div>
           <div class="fb-divider"></div>
-          <div class="fb-dir-stat"><span class="dk">Geändert</span><span class="dv">${item.modified || '—'}</span></div>
-          <div class="fb-dir-stat"><span class="dk">Rechte</span><span class="dv">${item.perms || '—'}</span></div>
+          <div class="fb-dir-stat"><span class="dk">Geändert</span><span class="dv">${item.modified || '-'}</span></div>
+          <div class="fb-dir-stat"><span class="dk">Rechte</span><span class="dv">${item.perms || '-'}</span></div>
         </div>
       </div>
       <div class="fb-preview-actions">
@@ -5568,10 +5568,10 @@ function fbShowPreview(item) {
     <div class="fb-preview-scroll">
       <div class="fb-meta">
         <div class="fb-meta-row"><span class="mk">Typ</span><span class="mv">${item.type.toUpperCase()}</span></div>
-        <div class="fb-meta-row"><span class="mk">Größe</span><span class="mv">${item.size || '—'}</span></div>
+        <div class="fb-meta-row"><span class="mk">Größe</span><span class="mv">${item.size || '-'}</span></div>
         <div class="fb-divider"></div>
-        <div class="fb-meta-row"><span class="mk">Geändert</span><span class="mv">${item.modified || '—'}</span></div>
-        <div class="fb-meta-row"><span class="mk">Rechte</span><span class="mv">${item.perms || '—'}</span></div>
+        <div class="fb-meta-row"><span class="mk">Geändert</span><span class="mv">${item.modified || '-'}</span></div>
+        <div class="fb-meta-row"><span class="mk">Rechte</span><span class="mv">${item.perms || '-'}</span></div>
       </div>
     </div>
     <div class="fb-preview-actions">
@@ -5828,7 +5828,7 @@ function mapRender() {
 
   // Chunk and region grid
   if (mapState.showGrid) {
-    // Chunks (16 blocks) — show when scale >= 1.5
+    // Chunks (16 blocks) - show when scale >= 1.5
     if (s >= 1.5) {
       mapCtx.strokeStyle = 'rgba(255,255,255,0.22)';
       mapCtx.lineWidth = 0.75;
@@ -5844,7 +5844,7 @@ function mapRender() {
         const pz = Math.round(H/2 + (bz2 - cz) * s);
         mapCtx.beginPath(); mapCtx.moveTo(0, pz); mapCtx.lineTo(W, pz); mapCtx.stroke();
       }
-      // Chunk coordinate labels — only when chunk cell >= 40px, placed bottom-left
+      // Chunk coordinate labels - only when chunk cell >= 40px, placed bottom-left
       if (s * 16 >= 40) {
         mapCtx.font = `${Math.max(8, Math.min(10, s * 1.6))}px monospace`;
         mapCtx.textAlign = 'left';
@@ -5862,7 +5862,7 @@ function mapRender() {
       }
     }
 
-    // Regions (512 blocks = 32 chunks) — always shown when grid is on
+    // Regions (512 blocks = 32 chunks) - always shown when grid is on
     mapCtx.strokeStyle = 'rgba(100,180,255,0.45)';
     mapCtx.lineWidth = 1.5;
     const rStart  = Math.floor((cx - W/2/s) / 512) * 512;
@@ -5878,7 +5878,7 @@ function mapRender() {
       mapCtx.beginPath(); mapCtx.moveTo(0, pz); mapCtx.lineTo(W, pz); mapCtx.stroke();
     }
     // Region labels
-    // Region labels — top-left of each region cell
+    // Region labels - top-left of each region cell
     mapCtx.font = 'bold 11px monospace';
     mapCtx.textAlign = 'left';
     for (let bx2 = rStart; bx2 <= rEnd; bx2 += 512) {
@@ -6087,7 +6087,7 @@ function mapCoordInputKey(e) {
 }
 
 function mapOpenFullscreen() {
-  toast('Vollbild — coming soon');
+  toast('Vollbild - coming soon');
 }
 
 function mapToggleDim() {
@@ -6346,7 +6346,7 @@ const BK_DATA = [
   { id:3,  name:'2025-04-26_19-34-12', type:'manual', date:'Gestern',     time:'19:34 Uhr', size:'2.0 GB', sizeBytes:2108, world:'Survival World', players:12, tps:'19.5', includes:['world/','world_nether/','world_the_end/','plugins/'], note:'Vor großem Event' },
   { id:4,  name:'2025-04-26_11-00-00', type:'auto',   date:'Gestern',     time:'11:00 Uhr', size:'2.0 GB', sizeBytes:2101, world:'Survival World', players:5,  tps:'19.9', includes:['world/','world_nether/','world_the_end/','plugins/EssentialsX/'] },
   { id:5,  name:'2025-04-26_03-00-00', type:'auto',   date:'Gestern',     time:'03:00 Uhr', size:'2.0 GB', sizeBytes:2088, world:'Survival World', players:0,  tps:'20.0', includes:['world/','world_nether/','world_the_end/','plugins/EssentialsX/'] },
-  { id:6,  name:'2025-04-25_11-00-00', type:'failed', date:'25.04.2025',  time:'11:00 Uhr', size:'—',      sizeBytes:0,    world:'Survival World', players:3,  tps:'18.2', includes:[], note:'Fehler: Nicht genug Speicherplatz' },
+  { id:6,  name:'2025-04-25_11-00-00', type:'failed', date:'25.04.2025',  time:'11:00 Uhr', size:'-',      sizeBytes:0,    world:'Survival World', players:3,  tps:'18.2', includes:[], note:'Fehler: Nicht genug Speicherplatz' },
   { id:7,  name:'2025-04-25_03-00-00', type:'auto',   date:'25.04.2025',  time:'03:00 Uhr', size:'1.9 GB', sizeBytes:2012, world:'Survival World', players:0,  tps:'20.0', includes:['world/','world_nether/','world_the_end/','plugins/EssentialsX/'] },
   { id:8,  name:'2025-04-24_11-00-00', type:'auto',   date:'24.04.2025',  time:'11:00 Uhr', size:'1.9 GB', sizeBytes:1998, world:'Survival World', players:7,  tps:'19.7', includes:['world/','world_nether/','world_the_end/','plugins/EssentialsX/'] },
   { id:9,  name:'2025-04-24_03-00-00', type:'auto',   date:'24.04.2025',  time:'03:00 Uhr', size:'1.9 GB', sizeBytes:1987, world:'Survival World', players:0,  tps:'20.0', includes:['world/','world_nether/','world_the_end/','plugins/EssentialsX/'] },
@@ -6591,13 +6591,13 @@ const LG_FILES = {
     { ts:'11:30:00', thr:'Server thread/INFO',  lv:'info', msg:'Auto-saving world data...' },
     { ts:'11:30:01', thr:'Server thread/INFO',  lv:'ok',   msg:'Auto-save complete. Saved 2 041 chunks in 1.5s' },
     { ts:'11:48:09', thr:'Server thread/WARN',  lv:'warn', msg:'Notch_123 moved too quickly! (8.14, 0.0, 0.0)' },
-    { ts:'11:48:09', thr:'Server thread/INFO',  lv:'info', msg:'Anti-cheat: flagged Notch_123 for speed — no action taken (single occurrence)' },
+    { ts:'11:48:09', thr:'Server thread/INFO',  lv:'info', msg:'Anti-cheat: flagged Notch_123 for speed - no action taken (single occurrence)' },
     { ts:'12:00:00', thr:'Server thread/INFO',  lv:'info', msg:'[dynmap] Rendering tiles for world: world...' },
     { ts:'12:00:04', thr:'Server thread/INFO',  lv:'ok',   msg:'[dynmap] Render complete: 512 tiles updated' },
     { ts:'12:14:19', thr:'Server thread/INFO',  lv:'ok',   msg:'Auto-save complete. Saved 2 204 chunks in 1.7s' },
     { ts:'12:33:47', thr:'Server thread/INFO',  lv:'ok',   msg:'Herobrine[/10.0.0.8:61042] logged in with entity id 521' },
     { ts:'12:33:47', thr:'Server thread/INFO',  lv:'info', msg:'Herobrine joined the game' },
-    { ts:'12:40:05', thr:'Server thread/WARN',  lv:'warn', msg:'[LuckPerms] Group "builder" has no parent — falling back to default' },
+    { ts:'12:40:05', thr:'Server thread/WARN',  lv:'warn', msg:'[LuckPerms] Group "builder" has no parent - falling back to default' },
     { ts:'12:41:11', thr:'Server thread/ERROR', lv:'err',  msg:'java.lang.NullPointerException: Cannot read field "location" because "entity" is null' },
     { ts:'12:41:11', thr:'Server thread/ERROR', lv:'err',  msg:'\tat net.minecraft.server.EntityTracker.tick(EntityTracker.java:214)' },
     { ts:'12:41:11', thr:'Server thread/ERROR', lv:'err',  msg:'\tat net.minecraft.server.MinecraftServer.tickServer(MinecraftServer.java:1102)' },
@@ -6709,7 +6709,7 @@ function lgRender() {
     // Now highlight (escapes HTML, applies syntax colours)
     let msgHtml = lgHighlight(rawMsg);
 
-    // Replace placeholders with actual <mark> tags (safe — placeholders survived escaping)
+    // Replace placeholders with actual <mark> tags (safe - placeholders survived escaping)
     msgHtml = msgHtml
       .replace(/\x00MARK\x00/g, '<mark style="background:rgba(184,157,85,0.3);color:var(--text-primary)">')
       .replace(/\x00ENDMARK\x00/g, '</mark>');
@@ -6873,7 +6873,7 @@ function lgDownload() {
 
 /** Rotate log file */
 function lgRotate() {
-  toast('Log rotiert — neue Datei: latest.log');
+  toast('Log rotiert - neue Datei: latest.log');
 }
 
 
@@ -6891,7 +6891,7 @@ function upDayPct(daysAgo) {
   // Known incident days get specific values
   const incidents = { 2: 100, 8: 96.0, 19: 98.1, 30: 100, 50: 98.4 };
   if (incidents[daysAgo] !== undefined) return incidents[daysAgo];
-  // Pseudo-random stable value — almost always 100
+  // Pseudo-random stable value - almost always 100
   const h = ((daysAgo * 2654435769) >>> 0) % 1000;
   return h < 5 ? 95 + (h % 5) : 100;
 }
@@ -6999,7 +6999,7 @@ function upSetRange(days, btn) {
 /** @type {Function|null} */
 let stScrollHandler = null;
 
-/** Initialise the settings page — set up scroll spy. */
+/** Initialise the settings page - set up scroll spy. */
 function stInit() {
   // Teardown previous handler
   const scrollEl = document.querySelector('.page-settings.active-page');

@@ -47,17 +47,12 @@ export class Button extends CustomElement {
         <button- @click=${this.handleClick} type="danger" disabled size="medium"><icon- src="./icons/alert_24.svg"></icon->Medium</button->
         <button- @click=${this.handleClick} type="danger" disabled size="large"><icon- src="./icons/alert_24.svg"></icon->Large</button->
 
-        <button-slider- @change=${(newValue) => console.log(newValue)}>
-          <button-slider-option- value="option_1">Option 1</button-slider-option->
-          <button-slider-option- value="option_2">Option 2</button-slider-option->
-          <button-slider-option- value="option_3">Option 3</button-slider-option->
-          <button-slider-option- value="option_4">Option 4</button-slider-option->
-          <button-slider-option- value="option_5">Option 5</button-slider-option->
-          <button-slider-option- value="option_6">Option 6</button-slider-option->
-          <button-slider-option- value="option_7">Option 7</button-slider-option->
-          <button-slider-option- value="option_8">Option 8</button-slider-option->
-          <button-slider-option- value="option_9">Option 9</button-slider-option->
-        </button-slider->
+        <select->
+          <search- placeholder="Search..."></search->
+          <option- value="option_1">Option 1</option->
+          <option- value="option_2" selected>Option 2</option->
+          <option- value="option_3">Option 3</option->
+        </select->
       </div>
     `;
   }

@@ -1,0 +1,40 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  box-sizing: border-box;
+  padding: 5px 10px;
+  border-radius: var(--radius-small);
+
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+
+  color: var(--color-text-debug);
+  cursor: pointer;
+  user-select: none;
+
+  transition:
+    color var(--transition-delay),
+    background-color var(--transition-delay);
+}
+
+/* Restore native `hidden` behaviour — :host styles otherwise win over
+   the browser's built-in `[hidden] { display: none }` rule. */
+:host([hidden]) {
+  display: none;
+}
+
+:host(:hover) {
+  background-color: var(--color-debug-dim);
+}
+
+:host([selected]) {
+  color: var(--color-text-primary, inherit);
+  background-color: var(--color-ok-dim);
+}
+
+:host([active]) {
+  /* outline: 2px solid var(--color-border-focus, #3d5a80); */
+  outline-offset: -2px;
+}
