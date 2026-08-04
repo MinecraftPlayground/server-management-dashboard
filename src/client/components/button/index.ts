@@ -23,10 +23,15 @@ export class Button extends CustomElement {
 
   static override styles = style
 
+  /** Visual style of the button. */
   @property({ attribute: 'type', reflect: true })
   accessor buttonType : ButtonType = buttonType.SECONDARY;
+
+  /** Size of the button. */
   @property({ attribute: 'size', reflect: true })
   accessor buttonSize : ButtonSize = buttonSize.MEDIUM;
+
+  /** Disables the button and prevents all interaction. */
   @property({ attribute: 'disabled', reflect: true, type: Boolean})
   accessor disabled : boolean = false;
 

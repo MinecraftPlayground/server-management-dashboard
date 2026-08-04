@@ -5,6 +5,7 @@
 
   box-sizing: border-box;
   padding: 5px 10px;
+  margin-top: 2px;
   border-radius: var(--radius-small);
 
   font-family: 'JetBrains Mono', monospace;
@@ -19,8 +20,10 @@
     background-color var(--transition-delay);
 }
 
-/* Restore native `hidden` behaviour — :host styles otherwise win over
-   the browser's built-in `[hidden] { display: none }` rule. */
+:host(:first-child) {
+  margin-top: 0;
+}
+
 :host([hidden]) {
   display: none;
 }
@@ -31,10 +34,20 @@
 
 :host([selected]) {
   color: var(--color-text-primary, inherit);
-  background-color: var(--color-ok-dim);
+  background-color: var(--color-debug-dim);
 }
 
 :host([active]) {
-  /* outline: 2px solid var(--color-border-focus, #3d5a80); */
+  outline: 2px solid var(--color-border-focus, #3d5a80);
   outline-offset: -2px;
+}
+
+:host([disabled]) {
+  color: var(--color-text-muted, #4a5568);
+  cursor: default;
+  opacity: 0.5;
+}
+
+:host([disabled]:hover) {
+  background-color: transparent;
 }

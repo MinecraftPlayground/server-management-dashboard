@@ -6,20 +6,16 @@ import style from './index.css' with {type: 'css'};
 
 /**
  * A single selectable option inside a `<select->`. Purely dumb - it
- * renders its label, reports selection requests upward, and reflects
- * whatever `selected`/`active` state the parent `<select->` assigns it.
- * The parent owns all actual selection logic, keyboard navigation and
- * search filtering.
+ * renders its label, reports clicks upward, and reflects whatever
+ * `selected`/`active` state the parent `<select->` assigns it. The
+ * parent owns all selection logic and keyboard navigation.
  *
  * @element option-
  *
  * @slot - The option's label.
  *
- * @fires option-:toggle - Requests that this option's selection be
- *        toggled (multi-select) or become the sole selection
- *        (single-select) - the parent `<select->` decides which, based
- *        on its own `multiple` state. `event.detail` contains
- *        `{ value }`. Bubbles and is composed.
+ * @fires option-:toggle - Requests that this option become selected.
+ *        `event.detail` contains `{ value }`. Bubbles and is composed.
  *
  * @example
  * ```html
@@ -42,29 +38,27 @@ export class Option extends CustomElement {
   @property({ attribute: 'value' })
   accessor value: string = '';
 
-  /**
-   * Whether this option is currently selected (part of the `<select->`'s
-   * value). Set by the parent - not intended to be written to directly,
-   * except declaratively in markup for the initial state.
-   */
+  /** Whether this option is selected. Set by the parent - not intended to be written to directly. */
   @property({ attribute: 'selected', reflect: true, type: Boolean })
   accessor selected: boolean = false;
 
   /**
-   * Whether this option is the one currently highlighted by keyboard
-   * navigation (i.e. what `aria-activedescendant` points to on the
-   * parent). Distinct from `selected` - in multi-select mode `active`
-   * moves across options with arrow keys without changing what's
-   * actually selected until Space/Enter is pressed. Set by the parent
-   * `<select->`.
+   * Whether this is the keyboard-highlighted option (what
+   * `aria-activedescendant` on the parent points to). Distinct from
+   * `selected` - arrow keys move `active` without committing a
+   * selection until Enter/Space is pressed. Set by the parent.
    */
   @property({ attribute: 'active', reflect: true, type: Boolean })
   accessor active: boolean = false;
 
+  /** Whether this option can be selected. Disabled options ignore clicks. */
+  @property({ attribute: 'disabled', reflect: true, type: Boolean })
+  accessor disabled: boolean = false;
+
   /**
-   * Optional tags used by `<select->`'s search filtering, in addition
-   * to this option's own text content. Not reflected as an attribute -
-   * set it as a property (`.tags=${['fruit', 'healthy']}`).
+   * Optional tags for `<select->`'s search filtering, in addition to
+   * this option's text. Not an attribute - set as a property
+   * (`.tags=${['fruit', 'healthy']}`).
    */
   @property({ attribute: false })
   accessor tags: string[] = [];
@@ -83,9 +77,14 @@ export class Option extends CustomElement {
     if (changed.has('selected')) {
       this.setAttribute('aria-selected', String(this.selected));
     }
+    if (changed.has('disabled')) {
+      this.setAttribute('aria-disabled', String(this.disabled));
+    }
   }
 
   private handleClick(): void {
+    if (this.disabled) return;
+
     this.dispatchEvent(
       new CustomEvent<{ value: string }>('option-:toggle', {
         detail: { value: this.value },

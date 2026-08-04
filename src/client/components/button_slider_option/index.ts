@@ -36,18 +36,11 @@ export class ButtonSliderOption extends CustomElement {
     this.addEventListener('click', this.#handleClick);
   }
 
-  /**
-   * Unique value identifying this option within its parent
-   * `<button-slider->`.
-   */
+  /** Unique value identifying this option within its parent `<button-slider->`. */
   @property({ attribute: 'value' })
   accessor value: string = '';
 
-  /**
-   * Whether this option is currently the selected one. Set by the
-   * parent `<button-slider->` - not intended to be set directly by
-   * consumers.
-   */
+  /** Whether this option is selected. Set by the parent - not intended to be set directly. */
   @property({ attribute: 'selected', reflect: true, type: Boolean })
   accessor selected: boolean = false;
 

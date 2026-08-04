@@ -6,38 +6,27 @@ import { fuzzySearch, type SearchData, type SearchResult } from './fuzzy_search.
 import style from './index.css' with {type: 'css'};
 
 /**
- * A reusable search input.
- *
- * On its own, it's a plain text field that fires `input` (on every
- * keystroke) and `change` (on blur/Enter) events carrying the raw query
- * string - usable anywhere a search box is needed.
- *
- * Optionally, set `.data` to a list of searchable entries and this
- * component will *also* run a fuzzy match against them internally on
- * every keystroke, firing a `results` event with the matches. This is a
- * convenience for fully self-contained, standalone use. Components that
- * embed a `<search->` to filter their *own* data (like `<select->`
- * filtering its `<option->` children) should generally leave `.data`
- * unset and instead listen for the plain `input` event, calling the
- * exported `fuzzySearch()` utility themselves - see `fuzzy_search.ts`.
+ * A reusable search input. Always fires `input`/`change` with the raw
+ * query string. Optionally set `.data` to also run a fuzzy match
+ * internally and fire `results` - for fully standalone use. Components
+ * that filter their *own* data (like `<select->`) should leave `.data`
+ * unset and call `fuzzySearch()` themselves on the `input` event.
  *
  * @element search-
  *
  * @slot icon - Optional leading icon, e.g. `<icon- slot="icon" src="...">`.
  *
- * @fires input - Fired on every keystroke. `event.detail` is the raw
- *        query string.
- * @fires change - Fired when the query settles (blur or Enter).
- *        `event.detail` is the raw query string.
- * @fires results - Only fired while `.data` is set. `event.detail` is
- *        the `SearchResult[]` from `fuzzySearch(this.data, value)`.
+ * @fires input - Every keystroke. `event.detail` is the raw query string.
+ * @fires change - On blur/Enter. `event.detail` is the raw query string.
+ * @fires results - Only while `.data` is set. `event.detail` is the
+ *        `SearchResult[]` from `fuzzySearch(this.data, value)`.
  *
  * @example Standalone, self-contained search
  * ```html
  * <search- .data=${myData} @results=${(e) => console.log(e.detail)}></search->
  * ```
  *
- * @example As a dumb input inside another component, e.g. `<select->`
+ * @example As a dumb input, filtering handled elsewhere
  * ```html
  * <search- @input=${(e) => filterSomethingWith(e.detail)}></search->
  * ```
@@ -46,17 +35,13 @@ import style from './index.css' with {type: 'css'};
 export class Search extends CustomElement {
   static override styles = style
 
-  /**
-   * Optional searchable data. When set, this component runs
-   * `fuzzySearch()` internally on every keystroke and fires `results`.
-   * Not reflected as an attribute - set it as a property (`.data=`).
-   */
+  /** Optional searchable data - if set, runs `fuzzySearch()` internally and fires `results`. Set as a property (`.data=`), not an attribute. */
   @property({ attribute: false })
   accessor data: SearchData[] | null = null;
 
   /** Placeholder text for the input. */
   @property({ attribute: 'placeholder' })
-  accessor placeholder: string = 'Suchen...';
+  accessor placeholder: string = 'Search...';
 
   /** The current query text. */
   @property({ attribute: 'value' })
@@ -66,12 +51,11 @@ export class Search extends CustomElement {
   accessor inputElement!: HTMLInputElement;
 
   /**
-   * Handles every keystroke: updates `value`, re-dispatches as a plain
-   * `input` event (stopping the native one first, so it isn't reported
-   * twice - see the `button-` component for why this is necessary),
-   * and optionally runs `fuzzySearch()` when `.data` is set.
+   * Updates `value`, re-dispatches as a plain `input` event (stopping
+   * the native one first - see `button-` for why), and runs
+   * `fuzzySearch()` if `.data` is set.
    *
-   * @param event - The native input event from the internal `<input>`.
+   * @param event - The native input event.
    */
   private handleInput(event: InputEvent): void {
     event.stopPropagation();
@@ -98,10 +82,9 @@ export class Search extends CustomElement {
   }
 
   /**
-   * Re-dispatches the native `change` (fired on blur, or Enter) as a
-   * composed event carrying just the query string.
+   * Re-dispatches the native `change` (blur/Enter) with just the query string.
    *
-   * @param event - The native change event from the internal `<input>`.
+   * @param event - The native change event.
    */
   private handleChange(event: Event): void {
     event.stopPropagation();

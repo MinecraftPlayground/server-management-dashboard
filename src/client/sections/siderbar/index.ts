@@ -6,7 +6,7 @@ import style from './index.css' with {type: 'css'};
 
 
 @customElement('sidebar-')
-export class Button extends CustomElement {
+export class Sidebar extends CustomElement {
 
   static override styles = style
 
@@ -47,11 +47,20 @@ export class Button extends CustomElement {
         <button- @click=${this.handleClick} type="danger" disabled size="medium"><icon- src="./icons/alert_24.svg"></icon->Medium</button->
         <button- @click=${this.handleClick} type="danger" disabled size="large"><icon- src="./icons/alert_24.svg"></icon->Large</button->
 
-        <select->
-          <search- placeholder="Search..."></search->
-          <option- value="option_1">Option 1</option->
-          <option- value="option_2" selected>Option 2</option->
-          <option- value="option_3">Option 3</option->
+        <select- multiple>
+          <option-group- label="Group 1">
+            <option- value="option_1">Option 1</option->
+            <option- value="option_2">Option 2</option->
+          </option-group->
+
+          <option-group- label="Group 2">
+            <option-group- label="Group 2.1">
+              <option- value="option_3">Option 3</option->
+              <option- value="option_4">Option 4</option->
+            </option-group->
+            <option- value="option_5" disabled>Option 6</option->
+          </option-group->
+          <option- value="option_6">Option 6 that is really long</option->
         </select->
       </div>
     `;
@@ -60,6 +69,6 @@ export class Button extends CustomElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'sidebar-': Button;
+    'sidebar-': Sidebar;
   }
 }

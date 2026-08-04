@@ -9,14 +9,9 @@ import { loadCachedSvg } from './load_cached_svg.ts';
 
 
 /**
- * Renders an SVG icon inline by fetching it from `src` and injecting its
- * markup directly into the shadow DOM. Requests are cached and
- * de-duplicated per `src` across all instances, so using the same icon
- * many times only triggers a single fetch. Sizing and colour are
- * controlled via CSS on the host element (`width`, `height`, `color`).
- *
- * Loading is driven by a `Task`, which re-runs whenever `src` changes and
- * automatically discards results from a previous, now-stale `src`.
+ * Renders an SVG icon inline by fetching it from `src`. Requests are
+ * cached and de-duplicated per `src` across all instances. Sizing and
+ * colour are controlled via CSS on the host (`width`, `height`, `color`).
  *
  * @element icon-
  *
@@ -37,23 +32,8 @@ import { loadCachedSvg } from './load_cached_svg.ts';
 @customElement('icon-')
 export class Icon extends CustomElement {
   static override styles = style
-
-  /** Path or URL to the `.svg` file to render. */
-  @property({ attribute: 'src', reflect: true })
-  accessor src : string = '';
-
-  /**
-   * Accessible label for the icon. When set, the icon is exposed to
-   * assistive technology as an image with this label. When omitted, the
-   * icon is treated as purely decorative (`aria-hidden`).
-   */
-  @property({ attribute: 'label', reflect: true })
-  accessor label : string = '';
-
-  /**
-   * Drives loading of the SVG at `src`. Re-runs automatically whenever
-   * `src` changes; stale in-flight runs are discarded by `Task` itself.
-   */
+  
+  /** Loads the SVG at `src`, re-running whenever it changes; stale in-flight runs are discarded by `Task`. */
   private svgTask = new Task(this, {
     task: ([src]) => loadCachedSvg(src),
     args: () => [this.src] as const,
@@ -67,10 +47,21 @@ export class Icon extends CustomElement {
       );
     },
   });
-
-  protected override updated(changed : Map<PropertyKey, unknown>) : void {
+ 
+  /** Path or URL to the `.svg` file to render. */
+  @property({ attribute: 'src' }) accessor src: string = '';
+ 
+  /**
+   * Accessible label for the icon. When set, the icon is exposed to
+   * assistive technology as an image with this label. When omitted, the
+   * icon is treated as purely decorative (`aria-hidden`).
+   */
+  @property({ attribute: 'label' }) accessor label: string = '';
+ 
+ 
+  protected override updated(changed: Map<PropertyKey, unknown>): void {
     if (!changed.has('label')) return;
-
+ 
     if (this.label) {
       this.setAttribute('role', 'img');
       this.setAttribute('aria-label', this.label);
@@ -80,19 +71,19 @@ export class Icon extends CustomElement {
       this.removeAttribute('aria-label');
     }
   }
-
+ 
   override render() : TemplateResult | unknown {
     return this.svgTask.render<StatusRenderer<string | null>>({
       initial: () => nothing,
       pending: () => nothing,
-      complete: (svg) => (svg ? html`${unsafeSVG(svg)}` : nothing),
+      complete: (markup) => (markup ? html`${unsafeSVG(markup)}` : nothing),
       error: () => nothing,
     });
   }
 }
-
+ 
 declare global {
   interface HTMLElementTagNameMap {
-    'icon-' : Icon;
+    'icon-': Icon;
   }
 }

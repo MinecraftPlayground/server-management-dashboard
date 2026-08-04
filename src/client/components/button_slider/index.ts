@@ -11,25 +11,21 @@ interface SliderSelectDetail {
 }
 
 /**
- * A segmented, animated toggle between a small set of mutually exclusive
- * options (e.g. a Dark/Light theme switch). Options are declared as
- * `<button-slider-option->` children; this element owns the selection
- * state, the sliding highlight that animates behind the active option,
- * and all keyboard interaction.
+ * A segmented, animated toggle between mutually exclusive options (e.g.
+ * a Dark/Light switch). Options are `<button-slider-option->` children;
+ * this element owns selection state, the sliding highlight, and
+ * keyboard interaction.
  *
- * Unlike a native radio group, only the group itself is a single Tab
- * stop (`role="radiogroup"` + `tabindex="0"` on the host) - arrow keys
- * move the active option via `aria-activedescendant` rather than moving
- * real DOM focus between individually-tabbable options.
+ * Only the group itself is a Tab stop (`role="radiogroup"` +
+ * `tabindex="0"`) - arrow keys move the active option via
+ * `aria-activedescendant` rather than moving real focus between options.
  *
  * @element button-slider-
  *
  * @slot - One or more `<button-slider-option->` elements.
  *
- * @fires change - Fired when the selected value changes, whether via
- *        click or keyboard. `event.detail` contains `{ value }`. Note
- *        that, like any DOM event bound with `@change=`, the listener
- *        receives the `Event` object itself - read the value off
+ * @fires change - Fired on selection change (click or keyboard).
+ *        `event.detail` contains `{ value }` - read it off
  *        `event.detail.value`, not off the event directly.
  *
  * @example
@@ -48,9 +44,9 @@ export class ButtonSlider extends CustomElement {
     super();
     this.addEventListener(
       'button-slider-option-:select',
-      this.handleOptionSelect as EventListener,
+      this.#handleOptionSelect as EventListener,
     );
-    this.addEventListener('keydown', this.handleKeydown);
+    this.addEventListener('keydown', this.#handleKeydown);
   }
 
   /** The currently selected option's value. */
@@ -70,11 +66,10 @@ export class ButtonSlider extends CustomElement {
   accessor optionElements!: ButtonSliderOption[];
 
   /** Guards against animating the thumb into place on first render. */
-  private hasPositionedOnce = false;
+  #hasPositionedOnce = false;
 
   /** Keeps the thumb correctly placed when an option resizes (e.g. font load, text change). */
-  // deno-lint-ignore no-undef
-  private resizeObserver = new ResizeObserver(() => this.positionThumb());
+  #resizeObserver = new ResizeObserver(() => this.#positionThumb());
 
   override connectedCallback(): void {
     super.connectedCallback();
@@ -88,25 +83,20 @@ export class ButtonSlider extends CustomElement {
     // `slotchange` is not reliably guaranteed to fire for content that
     // was already present at parse time in every browser; running this
     // once explicitly guarantees correct initial state regardless.
-    this.handleSlotChange();
+    this.#handleSlotChange();
   }
 
   protected override updated(changed: Map<PropertyKey, unknown>): void {
     if (changed.has('value')) {
-      this.syncSelection();
+      this.#syncSelection();
     }
   }
 
-  /**
-   * Called whenever the slotted `<button-slider-option->` children
-   * change. Defaults `value` to the first option if nothing (or an
-   * option that no longer exists) is selected, then syncs selection
-   * state and repositions the thumb.
-   */
-  private handleSlotChange(): void {
-    this.resizeObserver.disconnect();
+  /** Defaults `value` to the first option if the current one no longer exists, then syncs selection and the thumb. */
+  #handleSlotChange(): void {
+    this.#resizeObserver.disconnect();
     for (const option of this.optionElements) {
-      this.resizeObserver.observe(option);
+      this.#resizeObserver.observe(option);
     }
 
     const hasValidSelection = this.optionElements.some((option) => option.value === this.value);
@@ -115,15 +105,11 @@ export class ButtonSlider extends CustomElement {
       return; // `updated()` will run `#syncSelection()` from the `value` change above.
     }
 
-    this.syncSelection();
+    this.#syncSelection();
   }
 
-  /**
-   * Marks the option matching `value` as selected (all others as not),
-   * points `aria-activedescendant` at it, and repositions the sliding
-   * thumb behind it.
-   */
-  private syncSelection(): void {
+  /** Marks the option matching `value` as selected, points `aria-activedescendant` at it, and repositions the thumb. */
+  #syncSelection(): void {
     let selected: ButtonSliderOption | undefined;
 
     for (const option of this.optionElements) {
@@ -137,35 +123,34 @@ export class ButtonSlider extends CustomElement {
       this.removeAttribute('aria-activedescendant');
     }
 
-    this.positionThumb();
+    this.#positionThumb();
   }
 
   /**
-   * Measures the currently selected option's position/size relative to
-   * `.track` and moves the thumb there. Skips the transition for the
-   * very first positioning so the thumb doesn't visibly slide in from
-   * the top-left corner on initial render.
+   * Moves the thumb to the selected option's position/size. Skips the
+   * transition on the very first call so it doesn't visibly slide in
+   * from the top-left corner on initial render.
    */
-  private positionThumb(): void {
+  #positionThumb(): void {
     const selected = this.optionElements.find((option) => option.selected);
     if (!selected || !this.thumbElement || !this.trackElement) return;
 
     const trackRect = this.trackElement.getBoundingClientRect();
     const optionRect = selected.getBoundingClientRect();
 
-    if (!this.hasPositionedOnce) {
+    if (!this.#hasPositionedOnce) {
       this.thumbElement.style.transition = 'none';
     }
 
     this.thumbElement.style.width = `${optionRect.width}px`;
     this.thumbElement.style.transform = `translateX(${optionRect.left - trackRect.left}px)`;
 
-    if (!this.hasPositionedOnce) {
+    if (!this.#hasPositionedOnce) {
       // Force layout so `transition: none` above actually applies before
       // we remove it, then re-enable animation for future changes.
       this.thumbElement.offsetHeight;
       this.thumbElement.style.transition = '';
-      this.hasPositionedOnce = true;
+      this.#hasPositionedOnce = true;
     }
   }
 
@@ -175,31 +160,27 @@ export class ButtonSlider extends CustomElement {
    *
    * @param event - The `button-slider-option-:select` custom event.
    */
-  private handleOptionSelect(event: CustomEvent<SliderSelectDetail>): void {
-    this.selectValue(event.detail.value);
+  #handleOptionSelect(event: CustomEvent<SliderSelectDetail>): void {
+    this.#selectValue(event.detail.value);
     // Mirrors clicking a native radio: focus lands on the (now selected)
     // control so arrow keys work immediately afterwards.
     this.focus();
   }
 
   /**
-   * Moves the active selection between options via the arrow keys, and
-   * to the first/last option via Home/End. Real DOM focus never leaves
-   * the group itself - this only updates `value` (and, via
-   * `#syncSelection()`, `aria-activedescendant`), mirroring how a native
-   * `<select>` handles arrow keys without moving Tab focus anywhere.
+   * Arrow keys/Home/End/digits move the selection - real focus never
+   * leaves the group, only `value` (and `aria-activedescendant`) change.
    *
-   * @param event - The keydown event. Fires directly on the group,
-   *        since it's the element that actually holds focus.
+   * @param event - The keydown event, fired on the group itself.
    */
-  private handleKeydown(event: KeyboardEvent): void {
+  #handleKeydown(event: KeyboardEvent): void {
     const currentIndex = this.optionElements.findIndex((option) => option.selected);
     if (currentIndex === -1) return;
 
-    const numberIndex = this.numberKeyToIndex(event.key);
+    const numberIndex = this.#numberKeyToIndex(event.key);
     if (numberIndex !== null) {
       event.preventDefault();
-      this.selectValue(this.optionElements[numberIndex].value);
+      this.#selectValue(this.optionElements[numberIndex].value);
       return;
     }
 
@@ -207,11 +188,11 @@ export class ButtonSlider extends CustomElement {
 
     switch (event.key) {
       case 'ArrowRight':
-      case 'ArrowUp':
+      case 'ArrowDown':
         nextIndex = (currentIndex + 1) % this.optionElements.length;
         break;
       case 'ArrowLeft':
-      case 'ArrowDown':
+      case 'ArrowUp':
         nextIndex = (currentIndex - 1 + this.optionElements.length) % this.optionElements.length;
         break;
       case 'Home':
@@ -225,21 +206,17 @@ export class ButtonSlider extends CustomElement {
     }
 
     event.preventDefault();
-    this.selectValue(this.optionElements[nextIndex].value);
+    this.#selectValue(this.optionElements[nextIndex].value);
   }
 
   /**
-   * Maps a pressed digit key (`"1"`-`"9"`) to a zero-based option index,
-   * so e.g. pressing `2` selects the second option. Only enabled while
-   * there are fewer than 10 options, so every option has an
-   * unambiguous single-digit shortcut.
+   * Maps a digit key (`"1"`-`"9"`) to a zero-based option index. Only
+   * enabled below 10 options, so every option has an unambiguous shortcut.
    *
    * @param key - `event.key` from the keydown event.
-   * @returns The matching option's index, or `null` if the key isn't a
-   *          usable digit, there are 10+ options, or no option exists
-   *          at that position (e.g. `5` with only 3 options).
+   * @returns The matching index, or `null`.
    */
-  private numberKeyToIndex(key: string): number | null {
+  #numberKeyToIndex(key: string): number | null {
     if (this.optionElements.length >= 10) return null;
     if (!/^[1-9]$/.test(key)) return null;
 
@@ -252,7 +229,7 @@ export class ButtonSlider extends CustomElement {
    *
    * @param value - The newly selected option's value.
    */
-  private selectValue(value: string): void {
+  #selectValue(value: string): void {
     if (value === this.value) return;
     this.value = value;
     this.dispatchEvent(
@@ -268,7 +245,7 @@ export class ButtonSlider extends CustomElement {
     return html`
       <div class="track">
         <div class="thumb"></div>
-        <slot @slotchange=${this.handleSlotChange}></slot>
+        <slot @slotchange=${this.#handleSlotChange}></slot>
       </div>
     `;
   }

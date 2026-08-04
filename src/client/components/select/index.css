@@ -1,23 +1,122 @@
 :host {
+  display: inline-flex;
+
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  border-radius: var(--radius-medium);
+}
+
+:host(:focus-visible) {
+  outline: 2px solid var(--color-border-focus);
+}
+
+.trigger {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  gap: 8px;
 
   box-sizing: border-box;
-  padding: 4px;
+  min-width: 160px;
+  padding: 5px 10px;
   border: 1px solid var(--color-debug-border);
   border-radius: var(--radius-medium);
   background-color: var(--color-debug-dim);
 
-  max-height: 260px;
+  cursor: pointer;
+  user-select: none;
+
+  /* Anchor for the popup below - shared name is fine across multiple
+     <select-> instances, since each has its own shadow root and anchor
+     resolution is scoped to it (a dialog can only anchor to an element
+     within its own shadow-inclusive tree scope). */
+  anchor-name: --select-trigger;
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: var(--color-text-primary, inherit);
+}
+
+.label.placeholder {
+  color: var(--color-text-debug);
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--color-text-debug);
+  transition: transform var(--transition-delay);
+}
+
+:host([open]) .chevron {
+  transform: rotate(180deg);
+}
+
+/* The popup itself. Position/size come entirely from CSS Anchor
+   Positioning, referencing .trigger's `anchor-name` above - no JS
+   measurement or inline styles involved.
+
+   Preferred position: below the trigger, left-aligned. If that would
+   overflow the viewport, the browser automatically tries each fallback
+   in order until one fits: flip above (not enough room below), flip to
+   right-aligned (not enough room to the right), or both flipped at
+   once (trigger sitting in a corner with no room in either direction). */
+dialog {
+  position: fixed;
+  position-anchor: --select-trigger;
+  margin: 0;
+  margin-block: 4px;
+  padding: 4px;
+
+  top: anchor(bottom);
+  left: anchor(left);
+
+  box-sizing: border-box;
+  width: max-content;
+  min-width: anchor-size(width);
+  max-width: var(--select-popup-max-width, 320px);
+  max-height: 240px;
   overflow-y: auto;
+
+  border: 1px solid var(--color-debug-border);
+  border-radius: var(--radius-medium);
+  background-color: var(--color-background-surface, #161b24);
+  color: inherit;
+  font: inherit;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
-:host(:focus-visible) {
-  outline: 2px solid var(--color-border-focus, #3d5a80);
-  outline-offset: 2px;
+/* Flip variants - toggled via JS (measuring available viewport space),
+   since `position-try-fallbacks` isn't reliably supported everywhere
+   yet. Each just switches which trigger edge this axis attaches to. */
+dialog.flip-block {
+  top: auto;
+  bottom: anchor(top);
 }
 
-::slotted(search-) {
-  margin-bottom: 4px;
+dialog.flip-inline {
+  left: auto;
+  right: anchor(right);
+}
+
+dialog:focus {
+  outline: none;
+}
+
+/* This is a lightweight dropdown, not a true modal - keep the rest of
+   the page visually undimmed even though it's technically inert while
+   the popup is open. */
+dialog::backdrop {
+  background: transparent;
+}
+
+.empty {
+  padding: 12px 10px;
+  text-align: center;
+  color: var(--color-text-debug);
 }

@@ -1,45 +1,44 @@
-import { type TemplateResult, html } from '@lit'
-import { customElement, property, queryAssignedElements } from '@lit/decorators'
+import { type TemplateResult, html, nothing } from '@lit'
+import { customElement, property, state, query } from '@lit/decorators'
 import { CustomElement } from '../custom_element.ts';
 import type { Option } from '../option/index.ts';
-import { fuzzySearch, type SearchData } from '../search/fuzzy_search.ts';
 
 import style from './index.css' with {type: 'css'};
 
-
 /**
- * A themeable, accessible select - a listbox of `<option->` children,
- * optionally filterable via a slotted `<search->`.
+ * A themeable select modelled on the native `<select>`: a closed
+ * trigger showing the current value, opening a popup listbox of
+ * `<option->` children (optionally grouped via `<option-group->`).
  *
- * The group itself is always the single Tab stop (`role="listbox"` +
- * `tabindex="0"` on the host), even when a `<search->` is present -
- * arrow keys move the highlighted option via `aria-activedescendant`
- * without moving real DOM focus. Typing requires explicitly
- * clicking/tabbing into the search field itself.
+ * The popup is a native `<dialog>` (`showModal()`), positioned via CSS
+ * Anchor Positioning with a JS-measured fallback where that's not
+ * supported (see `index.css` and `positionPopupManually()`).
  *
  * @element select-
  *
- * @slot - `<option->` children, and optionally a single `<search->`
- *         (anywhere among them) to enable filtering.
+ * @slot - `<option->` children, optionally wrapped in `<option-group->`.
  *
- * @fires change - Fired whenever the selection changes, via click or
- *        keyboard. `event.detail` is a `string` (single-select) or
- *        `string[]` (multi-select, `multiple` attribute present).
+ * @fires change - Fired on selection change. `event.detail` is the
+ *        newly selected value (`string`).
  *
- * @example Single-select
+ * @example
  * ```html
  * <select- @change=${(e) => console.log(e.detail)}>
  *   <option- value="option_1">Option 1</option->
  *   <option- value="option_2" selected>Option 2</option->
+ *   <option- value="option_3" disabled>Option 3</option->
  * </select->
  * ```
  *
- * @example Multi-select with search
+ * @example With groups
  * ```html
- * <select- multiple @change=${(e) => console.log(e.detail)}>
- *   <search-></search->
- *   <option- value="option_1" tags="fruit">Option 1</option->
- *   <option- value="option_2" selected>Option 2</option->
+ * <select->
+ *   <option-group- label="First Group">
+ *     <option- value="option_1">Option 1</option->
+ *   </option-group->
+ *   <option-group- label="Second Group">
+ *     <option- value="option_2">Option 2</option->
+ *   </option-group->
  * </select->
  * ```
  */
@@ -49,268 +48,366 @@ export class Select extends CustomElement {
 
   constructor() {
     super();
-    this.addEventListener('option-:toggle', this.handleOptionToggle as EventListener);
-    this.addEventListener('input', this.handleSearchInput as EventListener);
     this.addEventListener('keydown', this.handleKeydown);
   }
 
-  /** Enables multi-select. When absent, exactly one option is always selected. */
-  @property({ attribute: 'multiple', reflect: true, type: Boolean })
-  accessor multiple: boolean = false;
+  /** Text shown in the closed trigger when nothing is selected. */
+  @property({ attribute: 'placeholder' })
+  accessor placeholder: string = 'Auswählen…';
 
-  /** All `<option->` children currently assigned to the slot, filtered or not. */
-  @queryAssignedElements({ selector: 'option-' })
-  accessor optionElements!: Option[];
+  /** Message shown inside the popup when there are no `<option->` descendants. */
+  @property({ attribute: 'empty-message' })
+  accessor emptyMessage: string = 'No options available';
 
-  /** Index (within the currently *visible* options) that's keyboard-highlighted. */
+  /** Whether the popup is open. Reflected, so it can be set declaratively (`<select- open>`). */
+  @property({ attribute: 'open', reflect: true, type: Boolean })
+  accessor open: boolean = false;
+
+  /** Label text of the currently selected option, shown in the closed trigger. */
+  @state()
+  accessor selectedLabel: string = '';
+
+  /** Whether there is at least one `<option->` descendant right now. */
+  @state()
+  accessor hasOptions: boolean = false;
+
+  @query('dialog')
+  accessor dialogElement!: HTMLDialogElement;
+
+  @query('.trigger')
+  accessor triggerElement!: HTMLDivElement;
+
+  /**
+   * All `<option->` descendants, however deeply nested. A plain
+   * light-DOM query rather than `queryAssignedElements`, since the
+   * latter can't see inside a slotted `<option-group->`'s own shadow DOM.
+   */
+  private get optionElements(): Option[] {
+    return Array.from(this.querySelectorAll('option-'));
+  }
+
+  /** Non-disabled options - the only ones reachable via keyboard or click. */
+  private get selectableOptions(): Option[] {
+    return this.optionElements.filter((option) => !option.disabled);
+  }
+
+  /** Index (within `selectableOptions`) that's currently keyboard-highlighted. */
   private activeIndex = 0;
 
   /**
-   * The currently selected value(s), derived from which `<option->`
-   * children have `selected` set - not a separately-tracked field, so
-   * it can never drift out of sync with what's declared in markup.
-   * `string` in single-select mode (empty string if nothing selected),
-   * `string[]` in multi-select mode.
+   * Whether arrow keys have been pressed since the popup opened - gates
+   * the highlight ring on the active option, similar to
+   * `:focus-visible`, so opening via mouse click doesn't show a
+   * highlight nobody asked for.
    */
-  get value(): string | string[] {
-    const selected = this.optionElements.filter((option) => option.selected).map((option) => option.value);
-    return this.multiple ? selected : (selected[0] ?? '');
+  private keyboardNavActive = false;
+
+  /** The currently selected option's value, or `''` if none is selected. */
+  get value(): string {
+    return this.optionElements.find((option) => option.selected)?.value ?? '';
   }
 
-  set value(newValue: string | string[]) {
-    const valuesToSelect = new Set(Array.isArray(newValue) ? newValue : [newValue].filter(Boolean));
+  set value(newValue: string) {
     for (const option of this.optionElements) {
-      option.selected = valuesToSelect.has(option.value);
+      option.selected = option.value === newValue;
     }
+    this.syncSelectedLabel();
   }
 
   override connectedCallback(): void {
     super.connectedCallback();
-    this.setAttribute('role', 'listbox');
     this.tabIndex = 0;
-  }
-
-  protected override updated(changed: Map<PropertyKey, unknown>): void {
-    if (!changed.has('multiple')) return;
-
-    if (this.multiple) {
-      this.setAttribute('aria-multiselectable', 'true');
-    } else {
-      this.removeAttribute('aria-multiselectable');
-    }
+    this.setAttribute('role', 'combobox');
+    this.setAttribute('aria-haspopup', 'listbox');
   }
 
   protected override firstUpdated(): void {
-    // `slotchange` is not reliably guaranteed to fire for content that
-    // was already present at parse time in every browser; running this
-    // once explicitly guarantees correct initial state regardless.
+    // `slotchange` isn't reliably guaranteed to fire for content already
+    // present at parse time in every browser; run this once to be sure.
     this.handleSlotChange();
+
+    if (this.open) {
+      this.showDialog();
+    }
+  }
+
+  protected override updated(changed: Map<PropertyKey, unknown>): void {
+    if (!changed.has('open')) return;
+
+    this.setAttribute('aria-expanded', String(this.open));
+
+    if (this.open) {
+      this.showDialog();
+    } else if (this.dialogElement?.open) {
+      this.dialogElement.close();
+      for (const option of this.optionElements) {
+        option.active = false;
+      }
+      this.dialogElement.removeAttribute('aria-activedescendant');
+    }
   }
 
   /**
-   * Ensures single-select mode always has *something* selected by
-   * default (mirroring native `<select>`), then establishes the
-   * initial keyboard-active option. Runs on every slot change so newly
-   * added/removed options stay correctly accounted for.
+   * Ensures something is selected by default (mirroring native
+   * `<select>`, skipping disabled options), then syncs the trigger
+   * label and empty-state flag.
    */
   private handleSlotChange(): void {
-    if (!this.multiple && this.optionElements.length > 0 && !this.optionElements.some((option) => option.selected)) {
-      this.optionElements[0].selected = true; // silent - no `change` event for this default
+    const options = this.optionElements;
+
+    if (options.length > 0 && !options.some((option) => option.selected)) {
+      const firstSelectable = options.find((option) => !option.disabled);
+      if (firstSelectable) firstSelectable.selected = true; // silent - no `change` for this default
     }
 
-    const visibleOptions = this.optionElements.filter((option) => !option.hidden);
-    const preSelectedIndex = visibleOptions.findIndex((option) => option.selected);
-    this.setActiveIndex(Math.max(preSelectedIndex, 0), visibleOptions);
+    this.hasOptions = options.length > 0;
+    this.syncSelectedLabel();
+  }
+
+  /** Reads the current selection's text content into `selectedLabel`. */
+  private syncSelectedLabel(): void {
+    const selected = this.optionElements.find((option) => option.selected);
+    this.selectedLabel = selected?.textContent?.trim() ?? '';
+  }
+
+  /** Shows the dialog and picks the initial keyboard-highlighted option. */
+  private showDialog(): void {
+    if (!this.dialogElement || this.dialogElement.open) return;
+
+    this.dialogElement.classList.remove('flip-block', 'flip-inline');
+    this.dialogElement.showModal();
+
+    this.keyboardNavActive = false;
+    const selectedIndex = this.selectableOptions.findIndex((option) => option.selected);
+    this.setActiveIndex(Math.max(selectedIndex, 0));
+
+    if (CSS.supports('anchor-name', '--select-trigger')) {
+      this.applyAnchorFlipClasses();
+    } else {
+      this.positionPopupManually();
+    }
   }
 
   /**
-   * Filters options via `fuzzySearch()` against each option's own text
-   * content plus its optional `tags` attribute. An empty query shows
-   * everything again.
-   *
-   * @param event - The `input` event, bubbled up from a slotted `<search->`.
+   * Measures the popup's natural size against available viewport space
+   * and toggles `.flip-block`/`.flip-inline` - each switches which
+   * `anchor()` expression `index.css` uses for that axis. JS-driven
+   * instead of `position-try-fallbacks`, which isn't reliably supported
+   * everywhere yet.
    */
-  private handleSearchInput(event: CustomEvent<string>): void {
-    const trimmed = event.detail.trim();
+  private applyAnchorFlipClasses(): void {
+    const triggerRect = this.triggerElement.getBoundingClientRect();
+    const popupRect = this.dialogElement.getBoundingClientRect();
 
-    if (!trimmed) {
-      for (const option of this.optionElements) option.hidden = false;
+    const spaceBelow = window.innerHeight - triggerRect.bottom;
+    const spaceAbove = triggerRect.top;
+    const needsFlipBlock = spaceBelow < popupRect.height && spaceAbove > spaceBelow;
+
+    const spaceRight = window.innerWidth - triggerRect.left;
+    const needsFlipInline = spaceRight < popupRect.width;
+
+    this.dialogElement.classList.toggle('flip-block', needsFlipBlock);
+    this.dialogElement.classList.toggle('flip-inline', needsFlipInline);
+  }
+
+  /** Fallback for browsers without CSS Anchor Positioning: same corner-aware placement, computed manually. */
+  private positionPopupManually(): void {
+    const triggerRect = this.triggerElement.getBoundingClientRect();
+    const popupHeight = this.dialogElement.offsetHeight;
+    const popupWidth = this.dialogElement.offsetWidth;
+    const viewportHeight = window.innerHeight;
+    const viewportWidth = window.innerWidth;
+
+    const spaceBelow = viewportHeight - triggerRect.bottom;
+    const spaceAbove = triggerRect.top;
+    const openUpward = spaceBelow < popupHeight && spaceAbove > spaceBelow;
+    const alignRight = triggerRect.left + popupWidth > viewportWidth;
+
+    const style = this.dialogElement.style;
+    style.minWidth = `${triggerRect.width}px`;
+
+    if (alignRight) {
+      style.left = 'auto';
+      style.right = `${viewportWidth - triggerRect.right}px`;
     } else {
-      const data: SearchData[] = this.optionElements.map((option) => ({
-        text: option.textContent?.trim() ?? '',
-        tags: option.tags ? option.tags : [],
-      }));
-
-      const matchedIndices = new Set(fuzzySearch(data, trimmed).map((result) => result.index));
-      this.optionElements.forEach((option, index) => {
-        option.hidden = !matchedIndices.has(index);
-      });
+      style.left = `${triggerRect.left}px`;
+      style.right = 'auto';
     }
 
-    this.setActiveIndex(0, this.optionElements.filter((option) => !option.hidden));
+    if (openUpward) {
+      style.top = 'auto';
+      style.bottom = `${viewportHeight - triggerRect.top + 4}px`;
+    } else {
+      style.top = `${triggerRect.bottom + 4}px`;
+      style.bottom = 'auto';
+    }
   }
 
   /**
-   * Handles a selection request bubbling up from a clicked `<option->`.
-   * In single-select mode it becomes the sole selection; in
-   * multi-select mode its own selection is toggled. Either way it also
-   * becomes the keyboard-active option, and focus moves to the group -
-   * mirroring how clicking a native radio/checkbox also focuses it.
-   *
-   * @param event - The `option-:toggle` custom event.
+   * Focuses the host before opening - matters because `<dialog>`
+   * restores focus to whatever had it before `showModal()` on close. A
+   * mouse click alone never gives the host real focus otherwise,
+   * breaking subsequent Tab navigation.
    */
-  private handleOptionToggle(event: CustomEvent<{ value: string }>): void {
-    const visibleOptions = this.optionElements.filter((option) => !option.hidden);
-    const index = visibleOptions.findIndex((option) => option.value === event.detail.value);
-    if (index !== -1) this.setActiveIndex(index, visibleOptions);
-
-    if (this.multiple) {
-      this.toggleSelection(event.detail.value);
-    } else {
-      this.selectOnly(event.detail.value);
-    }
-
+  private handleTriggerClick(): void {
     this.focus();
+    this.open = !this.open;
   }
 
   /**
-   * Arrow keys move the highlighted option; Home/End jump to the
-   * first/last visible option; digit keys `1`-`9` jump directly to that
-   * option (only while fewer than 10 are visible). In single-select
-   * mode, moving also selects immediately (radio-like); in
-   * multi-select mode, moving only highlights - Space/Enter toggles the
-   * highlighted option's selection.
+   * Sets which option is keyboard-highlighted, updating
+   * `aria-activedescendant` on the dialog (the element that actually
+   * holds focus while open) and each option's `active` state.
    *
-   * @param event - The keydown event. Always fires directly on the
-   *        group, since it's the only focusable element regardless of
-   *        whether a `<search->` is present.
+   * @param index - Index into `selectableOptions` to highlight.
    */
-  private handleKeydown(event: KeyboardEvent): void {
-    const visibleOptions = this.optionElements.filter((option) => !option.hidden);
-    if (visibleOptions.length === 0) return;
+  private setActiveIndex(index: number): void {
+    const selectable = this.selectableOptions;
 
-    if (event.key === 'Enter' || event.key === ' ') {
-      if (this.multiple) {
-        event.preventDefault();
-        this.toggleSelection(visibleOptions[this.activeIndex].value);
-      }
-      return;
-    }
-
-    const numberIndex = this.numberKeyToIndex(event.key, visibleOptions.length);
-    let nextIndex: number;
-
-    if (numberIndex !== null) {
-      nextIndex = numberIndex;
-    } else {
-      switch (event.key) {
-        case 'ArrowDown':
-        case 'ArrowRight':
-          nextIndex = (this.activeIndex + 1) % visibleOptions.length;
-          break;
-        case 'ArrowUp':
-        case 'ArrowLeft':
-          nextIndex = (this.activeIndex - 1 + visibleOptions.length) % visibleOptions.length;
-          break;
-        case 'Home':
-          nextIndex = 0;
-          break;
-        case 'End':
-          nextIndex = visibleOptions.length - 1;
-          break;
-        default:
-          return;
-      }
-    }
-
-    event.preventDefault();
-    this.setActiveIndex(nextIndex, visibleOptions);
-
-    if (!this.multiple) {
-      this.selectOnly(visibleOptions[nextIndex].value);
-    }
-  }
-
-  /**
-   * Maps a pressed digit key (`"1"`-`"9"`) to a zero-based index into
-   * the currently *visible* options, mirroring `<button-slider->`'s
-   * shortcut. Only enabled while fewer than 10 options are visible.
-   *
-   * @param key - `event.key` from the keydown event.
-   * @param visibleCount - Number of currently visible options.
-   * @returns The matching index, or `null`.
-   */
-  private numberKeyToIndex(key: string, visibleCount: number): number | null {
-    if (visibleCount >= 10) return null;
-    if (!/^[1-9]$/.test(key)) return null;
-
-    const index = Number(key) - 1;
-    return index < visibleCount ? index : null;
-  }
-
-  /**
-   * Marks exactly one option (by value) as selected, deselecting all
-   * others, and fires `change`.
-   *
-   * @param value - The value to select.
-   */
-  private selectOnly(value: string): void {
-    for (const option of this.optionElements) {
-      option.selected = option.value === value;
-    }
-    this.dispatchChange();
-  }
-
-  /**
-   * Flips one option's `selected` state without affecting any others,
-   * and fires `change`.
-   *
-   * @param value - The value to toggle.
-   */
-  private toggleSelection(value: string): void {
-    const option = this.optionElements.find((candidate) => candidate.value === value);
-    if (!option) return;
-    option.selected = !option.selected;
-    this.dispatchChange();
-  }
-
-  private dispatchChange(): void {
-    this.dispatchEvent(
-      new CustomEvent<string | string[]>('change', {
-        detail: this.value,
-        bubbles: true,
-        composed: true,
-      }),
-    );
-  }
-
-  /**
-   * Sets which (visible) option is keyboard-highlighted, updating
-   * `aria-activedescendant` and each option's `active` state to match.
-   *
-   * @param index - Index into `visibleOptions` to activate.
-   * @param visibleOptions - The currently visible options, pre-filtered
-   *        by the caller (avoids recomputing it repeatedly per call).
-   */
-  private setActiveIndex(index: number, visibleOptions: Option[]): void {
     for (const option of this.optionElements) {
       option.active = false;
     }
 
-    if (visibleOptions.length === 0) {
+    if (selectable.length === 0) {
       this.activeIndex = 0;
-      this.removeAttribute('aria-activedescendant');
+      this.dialogElement?.removeAttribute('aria-activedescendant');
       return;
     }
 
-    this.activeIndex = Math.min(Math.max(index, 0), visibleOptions.length - 1);
-    const active = visibleOptions[this.activeIndex];
-    active.active = true;
-    this.setAttribute('aria-activedescendant', active.id);
+    this.activeIndex = Math.min(Math.max(index, 0), selectable.length - 1);
+    const active = selectable[this.activeIndex];
+    active.active = this.keyboardNavActive; // see keyboardNavActive doc
+    this.dialogElement?.setAttribute('aria-activedescendant', active.id);
+  }
+
+  /**
+   * Closed: Enter/Space/either arrow opens the popup. Open: arrows move
+   * the highlight (wrapping), Enter/Space commits it and closes,
+   * Escape closes unchanged (native `<dialog>` already does this too -
+   * this is just an explicit, redundant-but-harmless path to the same
+   * result via `handleDialogClose()`).
+   *
+   * @param event - The keydown event.
+   */
+  private handleKeydown(event: KeyboardEvent): void {
+    if (!this.open) {
+      switch (event.key) {
+        case 'Enter':
+        case ' ':
+        case 'ArrowDown':
+        case 'ArrowUp':
+          event.preventDefault();
+          this.open = true;
+          break;
+      }
+      return;
+    }
+
+    const selectable = this.selectableOptions;
+
+    switch (event.key) {
+      case 'ArrowDown':
+        if (selectable.length === 0) return;
+        event.preventDefault();
+        this.keyboardNavActive = true;
+        this.setActiveIndex((this.activeIndex + 1) % selectable.length);
+        break;
+      case 'ArrowUp':
+        if (selectable.length === 0) return;
+        event.preventDefault();
+        this.keyboardNavActive = true;
+        this.setActiveIndex((this.activeIndex - 1 + selectable.length) % selectable.length);
+        break;
+      case 'Enter':
+      case ' ': {
+        if (selectable.length === 0) return;
+        event.preventDefault();
+        const active = selectable[this.activeIndex];
+        this.commitValue(active.value);
+        this.open = false;
+        break;
+      }
+      case 'Escape':
+        event.preventDefault();
+        this.open = false;
+        break;
+    }
+  }
+
+  /**
+   * A genuine backdrop click: with `showModal()`, clicking outside the
+   * dialog's content targets the dialog element itself, never a
+   * descendant.
+   *
+   * @param event - The click event, listened for on the dialog.
+   */
+  private handleDialogClick(event: MouseEvent): void {
+    if (event.target === this.dialogElement) {
+      this.open = false;
+    }
+  }
+
+  /** Keeps `open` in sync if something outside our control closes the native dialog. */
+  private handleDialogClose(): void {
+    this.open = false;
+  }
+
+  /**
+   * Commits a clicked `<option->` as the selection and closes the popup.
+   *
+   * @param event - The `option-:toggle` custom event.
+   */
+  private handleOptionToggle(event: CustomEvent<{ value: string }>): void {
+    this.commitValue(event.detail.value);
+    this.open = false;
+  }
+
+  /**
+   * Selects exactly one option by value, syncs the trigger label, and
+   * fires `change` if the value actually changed.
+   *
+   * @param value - The value to select.
+   */
+  private commitValue(value: string): void {
+    const changed = this.value !== value;
+
+    for (const option of this.optionElements) {
+      option.selected = option.value === value;
+    }
+    this.syncSelectedLabel();
+
+    if (changed) {
+      this.dispatchEvent(
+        new CustomEvent<string>('change', {
+          detail: value,
+          bubbles: true,
+          composed: true,
+        }),
+      );
+    }
   }
 
   override render(): TemplateResult {
-    return html`<slot @slotchange=${this.handleSlotChange}></slot>`;
+    return html`
+      <div class="trigger" @click=${this.handleTriggerClick}>
+        <span class="label ${this.selectedLabel ? '' : 'placeholder'}">
+          ${this.selectedLabel || this.placeholder}
+        </span>
+        <svg class="chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+
+      <dialog
+        role="listbox"
+        @click=${this.handleDialogClick}
+        @close=${this.handleDialogClose}
+        @option-:toggle=${this.handleOptionToggle}
+      >
+        ${!this.hasOptions ? html`<div class="empty">${this.emptyMessage}</div>` : nothing}
+        <slot @slotchange=${this.handleSlotChange}></slot>
+      </dialog>
+    `;
   }
 }
 

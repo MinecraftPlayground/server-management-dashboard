@@ -24,16 +24,14 @@ export interface SearchResult {
 
 /**
  * Case-insensitive, order-preserving subsequence match: every character
- * in `query` must appear in `target`, in the same relative order, with
- * any number of other characters allowed in between. This is the same
- * style of "fuzzy" matching used by tools like fzf or VS Code's command
- * palette - e.g. `"anima"` matches `"animals"`, and `"this be"` matches
- * `"...this could be..."` even though `"could "` sits in between.
+ * in `query` must appear in `target`, in the same relative order, gaps
+ * allowed - the same style used by fzf or VS Code's command palette.
+ * E.g. `"anima"` matches `"animals"`, and `"this be"` matches
+ * `"...this could be..."` even with `"could "` in between.
  *
  * @param query - The (non-empty) search query.
  * @param target - The string to search within.
- * @returns The matched character indices in `target`, one per query
- *          character in order - or `null` if no full match exists.
+ * @returns Matched character indices in `target`, in order - or `null` if no full match exists.
  */
 function subsequenceMatch(query: string, target: string): number[] | null {
   const lowerQuery = query.toLowerCase();
@@ -52,18 +50,16 @@ function subsequenceMatch(query: string, target: string): number[] | null {
 }
 
 /**
- * Runs a fuzzy (order-preserving subsequence) search across a list of
- * entries. An entry matches if the query subsequence-matches its `text`,
- * *or* any one of its `tags` - so a short tag like `"animals"` can make
- * an entry findable even by a query that never literally appears in its
- * `text`.
+ * Runs a fuzzy (subsequence) search across a list of entries. An entry
+ * matches if the query matches its `text`, or any one of its `tags` -
+ * so a tag like `"animals"` can make an entry findable even if the
+ * query never appears in its `text`.
  *
  * @param data - The searchable entries.
- * @param query - The raw, as-typed search query. An empty/whitespace-only
- *        query matches nothing - this represents "no search active"
- *        rather than "match everything". Callers that want to show all
- *        entries when the query is empty should special-case that
- *        themselves before calling this function.
+ * @param query - The raw, as-typed search query. Empty/whitespace-only
+ *        matches nothing - "no search active", not "match everything".
+ *        Callers wanting to show all entries on empty query should
+ *        special-case that themselves.
  * @returns One {@link SearchResult} per matching entry, in `data` order.
  */
 export function fuzzySearch(data: SearchData[], query: string): SearchResult[] {
