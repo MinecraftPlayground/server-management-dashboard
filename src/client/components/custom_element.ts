@@ -1,4 +1,6 @@
-import { LitElement } from '@lit';
+import { type CSSResultGroup, LitElement } from '@lit';
+
+import style from '../styles/default.css' with {type: 'css'};
 
 
 /**
@@ -9,4 +11,6 @@ export class CustomElement extends LitElement {
     super();
     this.setAttribute('shadow-root', '');
   }
+
+  static override styles : CSSResultGroup = [style];
 }

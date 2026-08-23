@@ -1,122 +1,98 @@
 :host {
   display: inline-flex;
-  outline: none;
 
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
+
+  .select-button {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    min-width: 160px;
+    padding: 5px 10px;
+    border: 1px solid var(--color-debug-border);
+    border-radius: var(--radius-medium);
+    background-color: var(--color-debug-dim);
+
+    cursor: pointer;
+    user-select: none;
+
+    anchor-name: --select-button;
+
+    &:focus-visible {
+      outline: 2px solid var(--color-border-focus);
+    }
+
+    .label {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: left;
+
+      color: var(--color-text-primary, inherit);
+
+      &.placeholder {
+        color: var(--color-text-debug);
+      }
+    }
+
+    .chevron {
+      flex-shrink: 0;
+      color: var(--color-text-debug);
+      transition: transform var(--transition-delay);
+    }
+  }
+
+  .select-menu {
+    position: absolute;
+    position-anchor: --select-button;
+    position-try-fallbacks: --down-right, --down-left, --up-right, --up-left;
+    top: calc(anchor(bottom) + 2px);
+    left: anchor(left);
+    padding: 4px;
+    max-height: 200px;
+
+    border: 1px solid var(--color-debug-border);
+    border-radius: var(--radius-medium);
+
+    background-color: var(--color-background-surface, #161b24);
+  }
 }
 
-:host(:focus-visible) .trigger {
-  outline: 2px solid var(--color-border-focus, #3d5a80);
-  outline-offset: 2px;
-}
-
-.trigger {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  box-sizing: border-box;
-  min-width: 160px;
-  padding: 5px 10px;
-  border: 1px solid var(--color-debug-border);
-  border-radius: var(--radius-medium);
-  background-color: var(--color-debug-dim);
-
-  cursor: pointer;
-  user-select: none;
-
-  /* Anchor for the popup below — shared name is fine across multiple
-     <select-> instances, since each has its own shadow root and anchor
-     resolution is scoped to it (a dialog can only anchor to an element
-     within its own shadow-inclusive tree scope). */
-  anchor-name: --select-trigger;
-}
-
-.label {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  color: var(--color-text-primary, inherit);
-}
-
-.label.placeholder {
-  color: var(--color-text-debug);
-}
-
-.chevron {
-  flex-shrink: 0;
-  color: var(--color-text-debug);
-  transition: transform var(--transition-delay);
-}
-
-:host([open]) .chevron {
-  transform: rotate(180deg);
-}
-
-:host([disabled]) .trigger {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-/* The popup itself. Position/size come entirely from CSS Anchor
-   Positioning, referencing .trigger's `anchor-name` above — no JS
-   measurement or inline styles involved for the base position.
-
-   Shown via `.show()`, not `.showModal()` (see index.ts) — no top
-   layer, so an explicit z-index is needed to reliably stack above
-   other page content.
-
-   Preferred position: below the trigger, left-aligned. Which side to
-   flip to when that would overflow the viewport (above / right-aligned
-   / both) is decided in JS by measurement and applied via the
-   `.flip-block`/`.flip-inline` classes below — see `index.ts`. */
-dialog {
-  position: fixed;
-  position-anchor: --select-trigger;
-  z-index: var(--select-popup-z-index, 1000);
-  margin: 0;
-  margin-block: 4px;
-  padding: 4px;
-
-  top: anchor(bottom);
+@position-try --down-right {
+  inset: unset;
+  top: calc(anchor(bottom) + 2px);
   left: anchor(left);
-
-  box-sizing: border-box;
-  width: max-content;
-  min-width: anchor-size(width);
-  max-width: var(--select-popup-max-width, 320px);
-  max-height: 240px;
-  overflow-y: auto;
-
-  border: 1px solid var(--color-debug-border);
-  border-radius: var(--radius-medium);
-  background-color: var(--color-background-surface, #161b24);
-  color: inherit;
-  font: inherit;
-
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
-/* Flip variants — toggled via JS (measuring available viewport space),
-   since `position-try-fallbacks` isn't reliably supported everywhere
-   yet. Each just switches which trigger edge this axis attaches to. */
-dialog.flip-block {
-  top: auto;
-  bottom: anchor(top);
-}
-
-dialog.flip-inline {
-  left: auto;
+@position-try --down-left {
+  inset: unset;
+  top: calc(anchor(bottom) + 2px);
   right: anchor(right);
 }
 
-.empty {
-  padding: 12px 10px;
-  text-align: center;
-  color: var(--color-text-debug);
+@position-try --up-right {
+  inset: unset;
+  bottom: calc(anchor(top) + 2px);
+  left: anchor(left);
 }
+
+@position-try --up-left {
+  inset: unset;
+  bottom: calc(anchor(top) + 2px);
+  left: anchor(left);
+}
+
+/* :host([open]) .chevron {
+  transform: rotate(180deg);
+} */
+
+/* :host([disabled]) .select-button {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+} */
+

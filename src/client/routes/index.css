@@ -2,20 +2,11 @@
 @import '../styles/index.css';
 
 
-*:not([shadow-root]),
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  color-scheme: dark;
-  font-family: 'Sora';
-}
-
-
 body {
   height: 100vh;
   display: grid;
+  
+  font-family: 'Sora';
   /* grid-template-areas:
     'header status'
     'sidebar main'
