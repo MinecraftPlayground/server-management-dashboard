@@ -1,5 +1,5 @@
 import { type PropertyValues, type TemplateResult, html, nothing } from '@lit'
-import { customElement, property, state, } from '@lit/decorators'
+import { customElement, property, query, queryAssignedElements, state, } from '@lit/decorators'
 import { CustomElement } from '../custom_element.ts';
 import type { Option } from '../option/index.ts';
 import { queryAssignedElementsDeep } from '../query_assigned_elements_deep.ts';
@@ -42,6 +42,9 @@ export class Select extends CustomElement {
   @property({ attribute: 'open', reflect: true, type: Boolean })
   accessor open : boolean = false;
 
+  @property({ attribute: 'value', reflect: true})
+  accessor value : string = ''
+
   /** Label text shown in the closed trigger - the selection, or "First +N more" while `multiple`. */
   @state()
   accessor selectedLabel : string = '';
@@ -50,16 +53,34 @@ export class Select extends CustomElement {
   @state()
   accessor hasOptions : boolean = false;
 
-  @queryAssignedElementsDeep({selector: 'option-'})
-  accessor optionElements! : Array<Option>;
+  @query('.select-button')
+  accessor selectButtonElement! : HTMLButtonElement;
 
-  @queryAssignedElementsDeep({selector: 'option-[disabled]'})
-  accessor optionElementsDisabled! : Array<Option>;
+  @query('.select-menu')
+  accessor selectMenuElement! : HTMLDivElement;
+
+  @queryAssignedElementsDeep({selector: 'option-:not([disabled])'})
+  accessor optionElementsEnabled! : Array<Option>;
 
   override firstUpdated() : void {
-    console.log(this.optionElements);
-    console.log(this.optionElementsDisabled);
-    
+    this.selectMenuElement.addEventListener('toggle', ({newState}) => {
+      this.open = newState === 'open'
+    })
+
+    this.optionElementsEnabled.forEach((element) => {
+      element.addEventListener('click', ({target}) => {
+        const option = target as Option;
+        
+        this.selectedLabel = option.innerText;
+        this.value = option.value
+        option.selected = !option.selected
+
+        if (!this.multiple) {
+          this.selectMenuElement.hidePopover();
+        }
+      })
+    })
+  
   }
 
   override render() : TemplateResult {

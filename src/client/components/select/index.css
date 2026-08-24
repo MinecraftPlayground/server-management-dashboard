@@ -54,6 +54,8 @@
     left: anchor(left);
     padding: 4px;
     max-height: 200px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-debug-dim) transparent;
 
     border: 1px solid var(--color-debug-border);
     border-radius: var(--radius-medium);
@@ -86,9 +88,9 @@
   left: anchor(left);
 }
 
-/* :host([open]) .chevron {
+:host([open]) .chevron {
   transform: rotate(180deg);
-} */
+}
 
 /* :host([disabled]) .select-button {
   opacity: 0.5;
