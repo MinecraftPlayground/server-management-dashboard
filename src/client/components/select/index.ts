@@ -72,8 +72,7 @@ export class Select extends CustomElement {
 
     if (option && this.optionElementsEnabled.includes(option)) {
       event.stopPropagation();
-      
-      this.selectedLabel = option.innerText;
+
       this.value = option.value;
       option.selected = !option.selected;
 
@@ -81,6 +80,14 @@ export class Select extends CustomElement {
         this.selectMenuElement.hidePopover();
       }
     }
+
+    const selected = this.optionElementsEnabled.filter((element) => element.selected)
+    if (selected.length > 1) {
+      this.selectedLabel = `${option.innerText} +${selected.length-1}`
+    } else {
+      this.selectedLabel = option.innerText;
+    }
+    
   }
 
   private onSlotChange() : void {

@@ -49,12 +49,6 @@ function deepCollectElements<QueriedElement extends Element>(
       collected.push(node as QueriedElement);
     }
 
-    // Walk every host, even when it does not match the selector. Its shadow
-    // root can contain matching elements.
-    for (const child of Array.from(node.children)) {
-      visit(child);
-    }
-
     if (node.shadowRoot) {
       deepCollectElements(node.shadowRoot, selector, flatten, collected);
     }
