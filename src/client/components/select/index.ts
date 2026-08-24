@@ -62,25 +62,33 @@ export class Select extends CustomElement {
   @queryAssignedElementsDeep({selector: 'option-:not([disabled])'})
   accessor optionElementsEnabled! : Array<Option>;
 
-  override firstUpdated() : void {
-    this.selectMenuElement.addEventListener('toggle', ({newState}) => {
-      this.open = newState === 'open'
-    })
+  private handleMenuToggle(event : ToggleEvent) : void {
+    this.open = event.newState === 'open';
+  }
 
-    this.optionElementsEnabled.forEach((element) => {
-      element.addEventListener('click', ({target}) => {
-        const option = target as Option;
-        
-        this.selectedLabel = option.innerText;
-        this.value = option.value
-        option.selected = !option.selected
+  private handleMenuClick(event : MouseEvent) : void {
+    const target = event.target as HTMLElement;
+    const option = target.closest('option-') as Option;
 
-        if (!this.multiple) {
-          this.selectMenuElement.hidePopover();
-        }
-      })
-    })
-  
+    if (option && this.optionElementsEnabled.includes(option)) {
+      event.stopPropagation();
+      
+      this.selectedLabel = option.innerText;
+      this.value = option.value;
+      option.selected = !option.selected;
+
+      if (!this.multiple) {
+        this.selectMenuElement.hidePopover();
+      }
+    }
+  }
+
+  private onSlotChange() : void {
+    const slot = this.shadowRoot?.querySelector('slot') as HTMLSlotElement;
+    const assigned = slot.assignedElements({ flatten: true });
+    this.hasOptions = assigned.length > 0;
+    
+    this.requestUpdate();
   }
 
   override render() : TemplateResult {
@@ -93,8 +101,14 @@ export class Select extends CustomElement {
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
       </button>
-      <div class="select-menu" id="${this.menuLink}" popover>
-        <slot></slot>
+      <div
+        class="select-menu"
+        id="${this.menuLink}"
+        popover
+        @toggle=${this.handleMenuToggle}
+        @click=${this.handleMenuClick}
+      >
+        <slot @slotchange=${this.onSlotChange}></slot>
       </div>
     `;
   }
